@@ -10,6 +10,7 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.UUID;
 
 public class PlayerManager {
@@ -66,8 +67,12 @@ public class PlayerManager {
     public void giveReward(Reward reward, UUID uuid){
         Player p = Bukkit.getPlayer(uuid);
         p.playSound(p.getLocation(),pluginConfig.getPickupSound(), pluginConfig.getPickupVolume(), pluginConfig.getPickupPitch());
-        for(String cmd : reward.getCommands()){
-            Bukkit.dispatchCommand(Main.getPlugin().getServer().getConsoleSender(), PlaceholderAPI.setPlaceholders(Bukkit.getPlayer(uuid),cmd));
+        List<String> commands = reward.getCommands();
+        if(commands == null || commands.isEmpty()) {
+            return;
+        }
+        for (String cmd : reward.getCommands()) {
+            Bukkit.dispatchCommand(Main.getPlugin().getServer().getConsoleSender(), PlaceholderAPI.setPlaceholders(Bukkit.getPlayer(uuid), cmd));
         }
     }
 

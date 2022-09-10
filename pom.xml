@@ -6,7 +6,7 @@
 
     <groupId>cz.waterchick</groupId>
     <artifactId>creward</artifactId>
-    <version>2.1</version>
+    <version>v2.1</version>
     <packaging>jar</packaging>
 
     <name>CReward</name>
@@ -86,7 +86,7 @@
         <repository>
             <id>github</id>
             <name>WaterChick</name>
-            <url>https://maven.pkg.github.com/WaterChick/creward</url>
+            <url>https://maven.pkg.github.com/WaterChick/CRewardR</url>
         </repository>
     </distributionManagement>
 </project>
