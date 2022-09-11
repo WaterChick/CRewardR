@@ -90,7 +90,7 @@ public class PluginConfig {
         if (!config.contains("Messages.autoPickup")) {
             config.set("Messages.autoPickup", "&7Auto-Claimed &a%rewards% &7reward(s) (Premium)");
         }
-        if (!config.contains("autoPickup")) {
+        if (!config.contains("Autopickup")) {
             config.set("Autopickup.enabled", true);
             config.set("Autopickup.permission", "creward.autoclaim");
         }
