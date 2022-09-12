@@ -95,7 +95,7 @@ public class PluginConfig {
             config.set("Autopickup.permission", "creward.autoclaim");
         }
         for(String key : config.getConfigurationSection("GUI.Rewards").getKeys(false)){
-            if(!config.contains("GUI.Rewards."+key+".noPermClaim")){
+            if(!config.contains("GUI.Rewards."+key+".Item.noPermClaim")){
                 config.set("GUI.Rewards."+key+".Item.noPermClaim.Item.Material", "BARRIER");
                 config.set("GUI.Rewards."+key+".Item.noPermClaim.Item.Data", 0);
                 config.set("GUI.Rewards."+key+".Item.noPermClaim.Item.skullData", "%player_name%");
