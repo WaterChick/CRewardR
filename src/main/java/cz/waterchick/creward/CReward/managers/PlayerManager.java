@@ -46,7 +46,11 @@ public class PlayerManager {
 
     public void claim(Reward reward, UUID uuid){
         String prefix = pluginConfig.getPrefix();
+        Player p = Bukkit.getPlayer(uuid);
         if(canClaim(reward,uuid) == ErrorType.SUCC){
+            if(pluginConfig.isCloseOnClaim()){
+                p.closeInventory();
+            }
             String msg = pluginConfig.getYesClaim();
             giveReward(reward,uuid);
             dataConfig.setIntTime(reward, uuid);
@@ -60,7 +64,6 @@ public class PlayerManager {
         }if(canClaim(reward,uuid) == ErrorType.NOTIME){
             String msg = pluginConfig.getNoClaim();
             Bukkit.getPlayer(uuid).sendMessage(prefix+Main.setPlaceholders(msg,reward,Bukkit.getPlayer(uuid)));
-            return;
         }
     }
 

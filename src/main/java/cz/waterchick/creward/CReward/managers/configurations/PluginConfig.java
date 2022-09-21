@@ -34,6 +34,7 @@ public class PluginConfig {
     private String autoClaim;
     private boolean autoPickup;
     private String autoPickupPerm;
+    private boolean closeOnClaim;
 
     private Sound openSound;
     private int openVolume;
@@ -124,6 +125,8 @@ public class PluginConfig {
                 config.set("Sounds.REWARD_PICKUP.Volume", 1);
                 config.set("Sounds.REWARD_PICKUP.Pitch", 4);
             }
+        }if(!config.contains("closeOnClaim")){
+            config.set("closeOnClaim", true);
         }
         saveConfig();
     }
@@ -141,6 +144,7 @@ public class PluginConfig {
             config.set("Messages.autoPickup", "&7Auto-Claimed &a%rewards% &7reward(s) (Premium)");
             config.set("Autopickup.enabled", true);
             config.set("Autopickup.permission", "creward.autoclaim");
+            config.set("closeOnClaim", true);
 
             config.set("GUI.title", "&8Daily reward");
             config.set("GUI.rows", 5);
@@ -274,6 +278,7 @@ public class PluginConfig {
             notify = Main.Color(config.getString("Messages.notify"));
             noPermInGUI = Main.Color(config.getString("Messages.noPermInGUI"));
             autoClaim = Main.Color(config.getString("Messages.autoPickup"));
+            closeOnClaim = config.getBoolean("closeOnClaim");
 
             autoPickup = config.getBoolean("Autopickup.enabled");
             autoPickupPerm = config.getString("Autopickup.permission");
@@ -421,6 +426,10 @@ public class PluginConfig {
 
     public String getAutoPickupPerm() {
         return autoPickupPerm;
+    }
+
+    public boolean isCloseOnClaim() {
+        return closeOnClaim;
     }
 }
 

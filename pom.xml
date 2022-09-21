@@ -6,7 +6,7 @@
 
     <groupId>cz.waterchick</groupId>
     <artifactId>creward</artifactId>
-    <version>v2.1.2</version>
+    <version>v2.1.4</version>
     <packaging>jar</packaging>
 
     <name>CReward</name>
