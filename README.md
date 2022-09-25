@@ -18,6 +18,7 @@
 - Sounds support
 - Multi-version support
 > 1.8.x - 1.19.x
+- MySQL support
 
 <h2 align="center">Plugin Preview</h2>
 <h3 align="center">Claimable</h3>
