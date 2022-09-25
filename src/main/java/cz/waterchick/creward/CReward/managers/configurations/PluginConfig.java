@@ -52,6 +52,12 @@ public class PluginConfig {
     private Material guiFillerItem;
     private int guiFillerItemData;
 
+    private Boolean enable;
+    private String username;
+    private String password;
+    private String adress;
+    private String db;
+
     private HashMap<ItemStack, Integer> otherItems = new HashMap<>();
 
 
@@ -127,6 +133,13 @@ public class PluginConfig {
             }
         }if(!config.contains("closeOnClaim")){
             config.set("closeOnClaim", true);
+        }if (!config.contains("MySQL")) {
+            config.set("MySQL.enable", false);
+            config.set("MySQL.username", "root");
+            config.set("MySQL.password", "");
+            config.set("MySQL.adress", "localhost:3306");
+            config.set("MySQL.db", "creward");
+            saveConfig();
         }
         saveConfig();
     }
@@ -265,6 +278,12 @@ public class PluginConfig {
 
 
         }
+
+        config.set("MySQL.enable", false);
+        config.set("MySQL.username", "root");
+        config.set("MySQL.password", "");
+        config.set("MySQL.adress", "localhost:3306");
+        config.set("MySQL.db", "creward");
     }
     public void loadVars(){
         try {
@@ -306,6 +325,12 @@ public class PluginConfig {
 
             pickupVolume = config.getInt("Sounds.REWARD_PICKUP.Volume");
             pickupPitch = config.getInt("Sounds.REWARD_PICKUP.Pitch");
+
+            enable = config.getBoolean("MySQL.enable");
+            username = config.getString("MySQL.username");
+            password = config.getString("MySQL.password");
+            db = config.getString("MySQL.db");
+            adress = config.getString("MySQL.adress");
 
             otherItems.clear();
             ConfigurationSection section = config.getConfigurationSection("GUI.otherItems");
@@ -430,6 +455,26 @@ public class PluginConfig {
 
     public boolean isCloseOnClaim() {
         return closeOnClaim;
+    }
+
+    public Boolean getEnable() {
+        return enable;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getAdress() {
+        return adress;
+    }
+
+    public String getDb() {
+        return db;
     }
 }
 

@@ -12,6 +12,7 @@ public class ClassManager {
     private PluginConfig pluginConfig;
     private DataConfig dataConfig;
     private RewardManager rewardManager;
+    private DBManager dbManager;
     private GUI gui;
     private PlayerManager playerManager;
     private PlaceholderAPI papi;
@@ -19,9 +20,10 @@ public class ClassManager {
     public ClassManager(){
         pluginConfig = new PluginConfig();
         dataConfig = new DataConfig();
-        rewardManager = new RewardManager(pluginConfig);
+        dbManager = new DBManager(pluginConfig);
+        rewardManager = new RewardManager(pluginConfig,dbManager);
         if(!Main.getPlugin().isDisabled()) {
-            playerManager = new PlayerManager(dataConfig, pluginConfig, rewardManager);
+            playerManager = new PlayerManager(dataConfig, pluginConfig, rewardManager,dbManager);
             gui = new GUI(pluginConfig, playerManager, rewardManager);
             papi = new PlaceholderAPI(playerManager, rewardManager, pluginConfig);
             Main.getPlugin().getCommand("creward").setExecutor(new Commands(gui, pluginConfig, playerManager, rewardManager));
@@ -49,5 +51,9 @@ public class ClassManager {
 
     public GUI getGui() {
         return gui;
+    }
+
+    public DBManager getDbManager() {
+        return dbManager;
     }
 }

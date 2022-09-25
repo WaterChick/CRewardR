@@ -15,11 +15,13 @@ import java.util.Map;
 public class RewardManager {
 
     private PluginConfig pluginConfig;
+    private DBManager dbManager;
 
     private HashMap<String, Reward> rewardHashMap = new HashMap<>();
 
-    public RewardManager(PluginConfig pluginConfig){
+    public RewardManager(PluginConfig pluginConfig, DBManager dbManager){
         this.pluginConfig = pluginConfig;
+        this.dbManager = dbManager;
         loadRewards();
     }
 
@@ -28,7 +30,9 @@ public class RewardManager {
         FileConfiguration config = pluginConfig.getConfig();
         ConfigurationSection section = config.getConfigurationSection("GUI.Rewards");
         for(String key : section.getKeys(false)){
-            rewardHashMap.put(key,new Reward(config.getConfigurationSection("GUI.Rewards."+key),key));
+            Reward reward = new Reward(config.getConfigurationSection("GUI.Rewards."+key),key);
+            rewardHashMap.put(key,reward);
+            dbManager.createTable(reward);
         }
     }
 

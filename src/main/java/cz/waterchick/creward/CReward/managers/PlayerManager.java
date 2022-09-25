@@ -18,17 +18,25 @@ public class PlayerManager {
     private DataConfig dataConfig;
     private PluginConfig pluginConfig;
     private RewardManager rewardManager;
+    private DBManager dbManager;
 
-    public PlayerManager(DataConfig dataConfig,PluginConfig pluginConfig,RewardManager rewardManager){
+    public PlayerManager(DataConfig dataConfig,PluginConfig pluginConfig,RewardManager rewardManager,DBManager dbManager){
         this.dataConfig = dataConfig;
         this.pluginConfig = pluginConfig;
         this.rewardManager = rewardManager;
+        this.dbManager = dbManager;
     }
 
 
 
     public ErrorType canClaim(Reward reward, UUID uuid){
-        if(dataConfig.getIntTime(reward,uuid) == 0){
+        Integer timeLeft = 0;
+        if(pluginConfig.getEnable()){
+            timeLeft = dbManager.getTime(uuid,reward);
+        }else{
+            timeLeft = dataConfig.getIntTime(reward,uuid);
+        }
+        if(timeLeft == 0){
             if(reward.getPermission() != null && !reward.getPermission().equalsIgnoreCase( "")) {
                 if (Bukkit.getPlayer(uuid).hasPermission(reward.getPermission())) {
                     return ErrorType.SUCC;
@@ -51,9 +59,14 @@ public class PlayerManager {
             if(pluginConfig.isCloseOnClaim()){
                 p.closeInventory();
             }
+
             String msg = pluginConfig.getYesClaim();
             giveReward(reward,uuid);
-            dataConfig.setIntTime(reward, uuid);
+            if(pluginConfig.getEnable()){
+                dbManager.insertTable(uuid,reward.getCooldown(),reward);
+            }else {
+                dataConfig.setIntTime(reward, uuid);
+            }
             Bukkit.getPlayer(uuid).sendMessage(prefix+Main.setPlaceholders(msg,reward,Bukkit.getPlayer(uuid)));
             return;
         }
@@ -80,7 +93,11 @@ public class PlayerManager {
     }
 
     public void reset(Reward reward, UUID uuid){
-        dataConfig.resetIntTime(reward, uuid);
+        if(pluginConfig.getEnable()){
+            dbManager.insertTable(uuid,0,reward);
+        }else {
+            dataConfig.resetIntTime(reward, uuid);
+        }
     }
 
     public int getAmount(UUID uuid){
@@ -94,7 +111,12 @@ public class PlayerManager {
     }
 
     public String getTime(Reward reward, UUID uuid, TimeFormat timeFormat){
-        int sec = dataConfig.getIntTime(reward,uuid);
+        int sec;
+        if(pluginConfig.getEnable()){
+            sec = dbManager.getTime(uuid,reward);
+        }else {
+            sec = dataConfig.getIntTime(reward, uuid);
+        }
         int hours = sec / 3600;
         int minutes = (sec % 3600) / 60;
         int seconds = sec % 60;
