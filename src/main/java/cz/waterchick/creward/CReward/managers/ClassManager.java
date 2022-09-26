@@ -20,9 +20,9 @@ public class ClassManager {
     public ClassManager(){
         pluginConfig = new PluginConfig();
         dataConfig = new DataConfig();
-        dbManager = new DBManager(pluginConfig);
-        rewardManager = new RewardManager(pluginConfig,dbManager);
         if(!Main.getPlugin().isDisabled()) {
+            dbManager = new DBManager(pluginConfig);
+            rewardManager = new RewardManager(pluginConfig,dbManager);
             playerManager = new PlayerManager(dataConfig, pluginConfig, rewardManager,dbManager);
             gui = new GUI(pluginConfig, playerManager, rewardManager);
             papi = new PlaceholderAPI(playerManager, rewardManager, pluginConfig);

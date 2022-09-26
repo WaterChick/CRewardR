@@ -38,11 +38,13 @@ public class PlayerManager {
         }
         if(timeLeft == 0){
             if(reward.getPermission() != null && !reward.getPermission().equalsIgnoreCase( "")) {
-                if (Bukkit.getPlayer(uuid).hasPermission(reward.getPermission())) {
-                    return ErrorType.SUCC;
-                } else {
-                    return ErrorType.NOPERM;
-                }
+                if(Bukkit.getPlayer(uuid) != null) {
+                    if (Bukkit.getPlayer(uuid).hasPermission(reward.getPermission())) {
+                        return ErrorType.SUCC;
+                    } else {
+                        return ErrorType.NOPERM;
+                    }
+                }return ErrorType.NOTIME;
             }else{
                 return ErrorType.SUCC;
             }

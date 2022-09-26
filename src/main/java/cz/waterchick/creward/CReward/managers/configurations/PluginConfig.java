@@ -98,7 +98,7 @@ public class PluginConfig {
             config.set("Messages.autoPickup", "&7Auto-Claimed &a%rewards% &7reward(s) (Premium)");
         }
         if (!config.contains("Autopickup")) {
-            config.set("Autopickup.enabled", true);
+            config.set("Autopickup.enabled", false);
             config.set("Autopickup.permission", "creward.autoclaim");
         }
         for(String key : config.getConfigurationSection("GUI.Rewards").getKeys(false)){
@@ -155,7 +155,7 @@ public class PluginConfig {
             config.set("Messages.readyToClaim", "&aReady to claim!");
             config.set("Messages.notify", "&7You can claim &a%creward_amount% &7reward(s)!");
             config.set("Messages.autoPickup", "&7Auto-Claimed &a%rewards% &7reward(s) (Premium)");
-            config.set("Autopickup.enabled", true);
+            config.set("Autopickup.enabled", false);
             config.set("Autopickup.permission", "creward.autoclaim");
             config.set("closeOnClaim", true);
 
@@ -167,13 +167,24 @@ public class PluginConfig {
             config.set("GUI.Filler.Item.Material", "STAINED_GLASS_PANE");
             config.set("GUI.Filler.Item.Data", 7);
 
-            config.set("Sounds.OPEN_MENU.Sound", "CHEST_OPEN");
-            config.set("Sounds.OPEN_MENU.Volume", 1);
-            config.set("Sounds.OPEN_MENU.Pitch", 4);
+            if(!Main.LegacySound()) {
 
-            config.set("Sounds.REWARD_PICKUP.Sound", "CHICKEN_EGG_POP");
-            config.set("Sounds.REWARD_PICKUP.Volume", 1);
-            config.set("Sounds.REWARD_PICKUP.Pitch", 4);
+                config.set("Sounds.OPEN_MENU.Sound", "BLOCK_CHEST_OPEN");
+                config.set("Sounds.OPEN_MENU.Volume", 1);
+                config.set("Sounds.OPEN_MENU.Pitch", 4);
+
+                config.set("Sounds.REWARD_PICKUP.Sound", "ENTITY_CHICKEN_EGG");
+                config.set("Sounds.REWARD_PICKUP.Volume", 1);
+                config.set("Sounds.REWARD_PICKUP.Pitch", 4);
+            }else{
+                config.set("Sounds.OPEN_MENU.Sound", "CHEST_OPEN");
+                config.set("Sounds.OPEN_MENU.Volume", 1);
+                config.set("Sounds.OPEN_MENU.Pitch", 4);
+
+                config.set("Sounds.REWARD_PICKUP.Sound", "CHICKEN_EGG_POP");
+                config.set("Sounds.REWARD_PICKUP.Volume", 1);
+                config.set("Sounds.REWARD_PICKUP.Pitch", 4);
+            }
 
             config.set("GUI.Rewards.test.Item.yesClaim.Item.Material", "STORAGE_MINECART");
             config.set("GUI.Rewards.test.Item.yesClaim.Item.Data", 0);
@@ -222,7 +233,7 @@ public class PluginConfig {
             config.set("Messages.readyToClaim", "&aReady to claim!");
             config.set("Messages.notify", "&7You can claim &a%creward_amount% &7reward(s)!");
             config.set("Messages.autoPickup", "&7Auto-Claimed &a%rewards% &7reward(s) (Premium)");
-            config.set("Autopickup.enabled", true);
+            config.set("Autopickup.enabled", false);
             config.set("Autopickup.permission", "creward.autoclaim");
 
             config.set("GUI.title", "&8Daily reward");
@@ -232,13 +243,24 @@ public class PluginConfig {
             config.set("GUI.Filler.Slots", new ArrayList<>(Arrays.asList(0, 1, 2, 3, 4)));
             config.set("GUI.Filler.Item.Material", "GRAY_STAINED_GLASS_PANE");
 
-            config.set("Sounds.OPEN_MENU.Sound", "BLOCK_CHEST_OPEN");
-            config.set("Sounds.OPEN_MENU.Volume", 1);
-            config.set("Sounds.OPEN_MENU.Pitch", 4);
+            if(!Main.LegacySound()) {
 
-            config.set("Sounds.REWARD_PICKUP.Sound", "ENTITY_CHICKEN_EGG");
-            config.set("Sounds.REWARD_PICKUP.Volume", 1);
-            config.set("Sounds.REWARD_PICKUP.Pitch", 4);
+                config.set("Sounds.OPEN_MENU.Sound", "BLOCK_CHEST_OPEN");
+                config.set("Sounds.OPEN_MENU.Volume", 1);
+                config.set("Sounds.OPEN_MENU.Pitch", 4);
+
+                config.set("Sounds.REWARD_PICKUP.Sound", "ENTITY_CHICKEN_EGG");
+                config.set("Sounds.REWARD_PICKUP.Volume", 1);
+                config.set("Sounds.REWARD_PICKUP.Pitch", 4);
+            }else{
+                config.set("Sounds.OPEN_MENU.Sound", "CHEST_OPEN");
+                config.set("Sounds.OPEN_MENU.Volume", 1);
+                config.set("Sounds.OPEN_MENU.Pitch", 4);
+
+                config.set("Sounds.REWARD_PICKUP.Sound", "CHICKEN_EGG_POP");
+                config.set("Sounds.REWARD_PICKUP.Volume", 1);
+                config.set("Sounds.REWARD_PICKUP.Pitch", 4);
+            }
 
             config.set("GUI.Rewards.test.Item.yesClaim.Item.Material", "CHEST_MINECART");
             config.set("GUI.Rewards.test.Item.yesClaim.Item.Data", 0);
@@ -313,8 +335,9 @@ public class PluginConfig {
             guiFillerSlots = config.getIntegerList("GUI.Filler.Slots");
 
             if(Main.getPlugin().getSound(config.getString("Sounds.OPEN_MENU.Sound")) == null || Main.getPlugin().getSound(config.getString("Sounds.REWARD_PICKUP.Sound")) == null){
-                Main.getPlugin().getLogger().severe("[CREWARD] Error when parsing sounds");
+                Main.getPlugin().getLogger().severe("Error while parsing sounds");
                 Main.getPlugin().disable();
+                return;
             }
 
             openSound = Sound.valueOf(config.getString("Sounds.OPEN_MENU.Sound"));
@@ -345,7 +368,7 @@ public class PluginConfig {
             }
         }catch (Exception e){
             System.out.println("Error while loading Config!");
-            loadVars();
+            e.printStackTrace();
         }
     }
 

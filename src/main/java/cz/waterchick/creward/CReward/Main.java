@@ -36,11 +36,12 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        plugin = this;
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
             getLogger().severe("Could not find PlaceholderAPI! This plugin is required.");
             Bukkit.getPluginManager().disablePlugin(this);
+            return;
         }
-        plugin = this;
         classManager = new ClassManager();
         start();
 
@@ -133,6 +134,44 @@ public final class Main extends JavaPlugin {
         }
         if(version.contains("1.12")){
             return true;
+        }
+        if(version.contains("1.13")){
+            return false;
+        }
+        if(version.contains("1.14")){
+            return false;
+        }
+        if(version.contains("1.15")){
+            return false;
+        }
+        if(version.contains("1.16")){
+            return false;
+        }
+        if(version.contains("1.17")){
+            return false;
+        }
+        if(version.contains("1.18")){
+            return false;
+        }
+        return false;
+    }
+
+    public static boolean LegacySound(){
+        String version = Bukkit.getVersion();
+        if(version.contains("1.8")){
+            return true;
+        }
+        if(version.contains("1.9")){
+            return false;
+        }
+        if(version.contains("1.10")){
+            return false;
+        }
+        if(version.contains("1.11")){
+            return false;
+        }
+        if(version.contains("1.12")){
+            return false;
         }
         if(version.contains("1.13")){
             return false;
