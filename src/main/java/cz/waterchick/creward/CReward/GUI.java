@@ -31,7 +31,7 @@ public class GUI {
     }
 
     public void openGUI(Player p){
-        Inventory inv = Bukkit.createInventory(null,pluginConfig.getGuiRows()*9, PlaceholderAPI.setPlaceholders(p,pluginConfig.getGuiTitle()));
+        Inventory inv = Bukkit.createInventory(null, pluginConfig.getGuiRows() * 9, Main.getPlugin().setPlaceholders(pluginConfig.getGuiTitle(),p));
         UUID uuid = p.getUniqueId();
         p.playSound(p.getLocation(),pluginConfig.getOpenSound(), pluginConfig.getOpenVolume(), pluginConfig.getOpenPitch());
         if(pluginConfig.isGuiFillerEnable()){
@@ -62,22 +62,7 @@ public class GUI {
                 if(getSkullData(r, uuid) != null){
                     if(getSkullData(r,uuid).equalsIgnoreCase("%player%") || getSkullData(r,uuid).equalsIgnoreCase("%player_name%")){
                         meta.setOwner(p.getDisplayName());
-                        List<String> newlore = new ArrayList<>();
-                        for (String line : meta.getLore()) {
-                            if (line.contains("%creward_time%")) {
-                                line = line.replace("%creward_time%", "%creward_time_" + r.getName() + "%");
-                            }
-                            if (line.contains("%creward_hours%")) {
-                                line = line.replace("%creward_hours%", "%creward_hours_" + r.getName() + "%");
-                            }
-                            if (line.contains("%creward_minutes%")) {
-                                line = line.replace("%creward_minutes%", "%creward_minutes_" + r.getName() + "%");
-                            }
-                            if (line.contains("%creward_seconds%")) {
-                                line = line.replace("%creward_seconds%", "%creward_seconds_" + r.getName() + "%");
-                            }
-                            newlore.add(PlaceholderAPI.setPlaceholders(p, line));
-                        }
+                        List<String> newlore = Main.getPlugin().setPlaceholders(meta.getLore(),r,p);
                         meta.setLore(newlore);
                     }
                 }
@@ -85,22 +70,7 @@ public class GUI {
             }
             else {
                 ItemMeta meta = item.getItemMeta();
-                List<String> newlore = new ArrayList<>();
-                for (String line : meta.getLore()) {
-                    if (line.contains("%creward_time%")) {
-                        line = line.replace("%creward_time%", "%creward_time_" + r.getName() + "%");
-                    }
-                    if (line.contains("%creward_hours%")) {
-                        line = line.replace("%creward_hours%", "%creward_hours_" + r.getName() + "%");
-                    }
-                    if (line.contains("%creward_minutes%")) {
-                        line = line.replace("%creward_minutes%", "%creward_minutes_" + r.getName() + "%");
-                    }
-                    if (line.contains("%creward_seconds%")) {
-                        line = line.replace("%creward_seconds%", "%creward_seconds_" + r.getName() + "%");
-                    }
-                    newlore.add(PlaceholderAPI.setPlaceholders(p, line));
-                }
+                List<String> newlore = Main.getPlugin().setPlaceholders(meta.getLore(),r,p);
                 meta.setLore(newlore);
                 item.setItemMeta(meta);
             }
@@ -113,7 +83,10 @@ public class GUI {
             meta.setDisplayName(Main.Color(meta.getDisplayName()));
             List<String> newlore = new ArrayList<>();
             for(String line : meta.getLore()){
-                newlore.add(PlaceholderAPI.setPlaceholders(p,line));
+                if(Main.getPlugin().isPapiEnabled()){
+                    line = PlaceholderAPI.setPlaceholders(p,line);
+                }
+                newlore.add(line);
             }
             meta.setLore(newlore);
             item.setItemMeta(meta);

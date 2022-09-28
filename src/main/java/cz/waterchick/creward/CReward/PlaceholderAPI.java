@@ -100,7 +100,7 @@ public class PlaceholderAPI extends PlaceholderExpansion {
                     return "";
                 }
                 if(playerManager.canClaim(reward,player.getUniqueId()) == ErrorType.NOPERM){
-                    return Main.Color("&cNo permission");
+                    return pluginConfig.getNoPermInGUI();
                 }
                 if(playerManager.canClaim(reward,player.getUniqueId()) == ErrorType.SUCC){
                     return pluginConfig.getReadyToClaim();

@@ -1,0 +1,109 @@
+Messages:
+  Prefix: '&8[&2CReward&8] &r'
+  claim: '&aReward claimed!'
+  noClaim: '&cYou can not claim this reward yet! &7(%creward_time%)'
+  configReload: '&7Config reloaded'
+  reset: '&7%player_name%''s reward time has been reseted'
+  noPerm: '&cYou do not have permission to execute this command'
+  readyToClaim: '&aReady to claim!'
+  notify: '&7You can claim &a%creward_amount% &7reward(s)!'
+  autoPickup: '&7Auto-Claimed &a%rewards% &7reward(s) (Premium)'
+#Auto picks up all rewards for player after joining
+#If false, player gets only a notification
+Autopickup:
+  enabled: false
+  permission: creward.autoclaim
+#Should the GUI close after claiming a reward
+closeOnClaim: true
+GUI:
+  title: '&8Daily reward'
+  rows: 5
+  #Glass Filler for the GUI
+  Filler:
+    Enable: true
+    Slots:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+    Item:
+      Material: STAINED_GLASS_PANE
+      #ID (Color) of the glass
+      Data: 7
+  Rewards:
+    daily:
+      Item:
+        #Reward claimable
+        yesClaim:
+          Item:
+            Material: CHEST_MINECART
+            Data: 0
+            skullData: '%player_name%'
+            amount: 1
+          Title: '&aDaily reward'
+          Lore: |2-
+
+            &fClick to claim
+          Slot: 10
+          #Permission to claim this reward
+          Permission: ''
+        #Waiting for reward
+        noClaim:
+          Item:
+            Material: MINECART
+            Data: 0
+            skullData: '%player_name%'
+            amount: 1
+          Title: '&cDaily reward'
+          Lore: |2-
+
+            &7Come back again in &f%creward_time%
+          Slot: 10
+        #No permission for reward
+        noPermClaim:
+          Item:
+            Material: BARRIER
+            Data: 0
+            skullData: '%player_name%'
+            amount: 1
+          Title: '&cDaily reward'
+          Lore: |2-
+
+            &cNo permission
+          Slot: 10
+      #Commands executed after claiming
+      Commands:
+        - give %player_name% diamond 64
+        - give %player_name% golden_apple 2
+      #Cooldown for the reward, in seconds
+      Cooldown: 86400
+  #Items for designing the GUI
+  otherItems:
+    item1:
+      Item:
+        ==: org.bukkit.inventory.ItemStack
+        type: IRON_INGOT
+        meta:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: '&aItem 1'
+          lore:
+            - '&cLore'
+            - '&eLore2'
+      Slot: 12
+Sounds:
+  OPEN_MENU:
+    Sound: BLOCK_CHEST_OPEN
+    Volume: 1
+    Pitch: 4
+  REWARD_PICKUP:
+    Sound: ENTITY_CHICKEN_EGG
+    Volume: 1
+    Pitch: 4
+MySQL:
+  enable: false
+  username: root
+  password: ''
+  adress: localhost:3306
+  db: creward

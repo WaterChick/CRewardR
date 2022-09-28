@@ -34,7 +34,11 @@ public class Events implements Listener {
     public void onInventoryClick(InventoryClickEvent e){
         Player p = (Player) e.getWhoClicked();
         UUID uuid = p.getUniqueId();
-        if(p.getOpenInventory().getTitle().equals(PlaceholderAPI.setPlaceholders(p,pluginConfig.getGuiTitle()))){
+        String title = pluginConfig.getGuiTitle();
+        if(Main.getPlugin().isPapiEnabled()){
+            title = PlaceholderAPI.setPlaceholders(p,title);
+        }
+        if(p.getOpenInventory().getTitle().equals(title)){
             e.setCancelled(true);
             if(e.getCurrentItem() == null){
                 return;
@@ -43,7 +47,6 @@ public class Events implements Listener {
             if(item.getItemMeta()==null){
                 return;
             }
-            String title = item.getItemMeta().getDisplayName();
             Reward reward = rewardManager.getReward(e.getSlot());
             if(reward == null){
                 return;
@@ -69,7 +72,8 @@ public class Events implements Listener {
                     if(pluginConfig.getNotify().equalsIgnoreCase("false") || pluginConfig.getNotify() == null){
                         return;
                     }
-                    p.sendMessage(pluginConfig.getPrefix() + PlaceholderAPI.setPlaceholders(p, pluginConfig.getNotify()));
+                    String msg = pluginConfig.getNotify();
+                    p.sendMessage(pluginConfig.getPrefix() + Main.getPlugin().setPlaceholders(msg,p));
                 }
             }
         }, 20L * 3);

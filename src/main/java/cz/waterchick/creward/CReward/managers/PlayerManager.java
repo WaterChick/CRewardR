@@ -69,16 +69,16 @@ public class PlayerManager {
             }else {
                 dataConfig.setIntTime(reward, uuid);
             }
-            Bukkit.getPlayer(uuid).sendMessage(prefix+Main.setPlaceholders(msg,reward,Bukkit.getPlayer(uuid)));
+            Bukkit.getPlayer(uuid).sendMessage(prefix+Main.getPlugin().setPlaceholders(msg,reward,Bukkit.getPlayer(uuid)));
             return;
         }
         if(canClaim(reward,uuid) == ErrorType.NOPERM){
             String msg = pluginConfig.getNoPerm();
-            Bukkit.getPlayer(uuid).sendMessage(prefix+Main.setPlaceholders(msg,reward,Bukkit.getPlayer(uuid)));
+            Bukkit.getPlayer(uuid).sendMessage(prefix+Main.getPlugin().setPlaceholders(msg,reward,Bukkit.getPlayer(uuid)));
             return;
         }if(canClaim(reward,uuid) == ErrorType.NOTIME){
             String msg = pluginConfig.getNoClaim();
-            Bukkit.getPlayer(uuid).sendMessage(prefix+Main.setPlaceholders(msg,reward,Bukkit.getPlayer(uuid)));
+            Bukkit.getPlayer(uuid).sendMessage(prefix+Main.getPlugin().setPlaceholders(msg,reward,Bukkit.getPlayer(uuid)));
         }
     }
 
@@ -90,7 +90,7 @@ public class PlayerManager {
             return;
         }
         for (String cmd : reward.getCommands()) {
-            Bukkit.dispatchCommand(Main.getPlugin().getServer().getConsoleSender(), PlaceholderAPI.setPlaceholders(Bukkit.getPlayer(uuid), cmd));
+            Bukkit.dispatchCommand(Main.getPlugin().getServer().getConsoleSender(), Main.getPlugin().setPlaceholders(cmd,p));
         }
     }
 

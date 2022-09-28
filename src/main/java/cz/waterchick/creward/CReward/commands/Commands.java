@@ -48,7 +48,8 @@ public class Commands implements CommandExecutor {
                         }
                     }else{
                         Player p = (Player) sender;
-                        sender.sendMessage(pluginConfig.getPrefix() + PlaceholderAPI.setPlaceholders(p,pluginConfig.getNoPerm()));
+                        String msg = pluginConfig.getNoPerm();
+                        sender.sendMessage(pluginConfig.getPrefix() + Main.getPlugin().setPlaceholders(msg,p));
                         return false;
                     }
                 }if(args[0].equalsIgnoreCase("help")){
@@ -63,18 +64,20 @@ public class Commands implements CommandExecutor {
                 if(args[0].equalsIgnoreCase("reset")){
                     if(sender.hasPermission("cr.reset")){
                         Reward reward = rewardManager.getReward(args[1]);
-                        Player player = Bukkit.getPlayer(args[2]);
+                        Player p = Bukkit.getPlayer(args[2]);
                         if(reward == null){
                             return false;
                         }
-                        if(player == null){
+                        if(p == null){
                             return false;
                         }
-                        playerManager.reset(reward,player.getUniqueId());
-                        sender.sendMessage(pluginConfig.getPrefix() + PlaceholderAPI.setPlaceholders(player,pluginConfig.getReset()));
+                        playerManager.reset(reward,p.getUniqueId());
+                        String msg = pluginConfig.getReset();
+                        sender.sendMessage(pluginConfig.getPrefix() + Main.getPlugin().setPlaceholders(msg,p));
                     }else{
                         Player p = (Player) sender;
-                        sender.sendMessage(pluginConfig.getPrefix() + PlaceholderAPI.setPlaceholders(p,pluginConfig.getNoPerm()));
+                        String msg = pluginConfig.getNoPerm();
+                        sender.sendMessage(pluginConfig.getPrefix() + Main.getPlugin().setPlaceholders(msg,p));
                         return false;
                     }
                 }

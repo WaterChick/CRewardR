@@ -20,15 +20,15 @@ public class ClassManager {
     public ClassManager(){
         pluginConfig = new PluginConfig();
         dataConfig = new DataConfig();
-        if(!Main.getPlugin().isDisabled()) {
-            dbManager = new DBManager(pluginConfig);
-            rewardManager = new RewardManager(pluginConfig,dbManager);
-            playerManager = new PlayerManager(dataConfig, pluginConfig, rewardManager,dbManager);
-            gui = new GUI(pluginConfig, playerManager, rewardManager);
+        dbManager = new DBManager(pluginConfig);
+        rewardManager = new RewardManager(pluginConfig,dbManager);
+        playerManager = new PlayerManager(dataConfig, pluginConfig, rewardManager,dbManager);
+        gui = new GUI(pluginConfig, playerManager, rewardManager);
+        Main.getPlugin().getCommand("creward").setExecutor(new Commands(gui, pluginConfig, playerManager, rewardManager));
+        Main.getPlugin().getServer().getPluginManager().registerEvents(new Events(pluginConfig, playerManager, gui, rewardManager), Main.getPlugin());
+        Main.getPlugin().getCommand("creward").setTabCompleter(new TabCompleter(rewardManager));
+        if(Main.getPlugin().isPapiEnabled()) {
             papi = new PlaceholderAPI(playerManager, rewardManager, pluginConfig);
-            Main.getPlugin().getCommand("creward").setExecutor(new Commands(gui, pluginConfig, playerManager, rewardManager));
-            Main.getPlugin().getServer().getPluginManager().registerEvents(new Events(pluginConfig, playerManager, gui, rewardManager), Main.getPlugin());
-            Main.getPlugin().getCommand("creward").setTabCompleter(new TabCompleter(rewardManager));
             papi.register();
         }
     }

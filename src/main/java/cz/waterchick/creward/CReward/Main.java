@@ -1,5 +1,6 @@
 package cz.waterchick.creward.CReward;
 
+import cz.waterchick.creward.CReward.enums.TimeFormat;
 import cz.waterchick.creward.CReward.managers.ClassManager;
 import cz.waterchick.creward.CReward.managers.DBManager;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -30,6 +31,7 @@ public final class Main extends JavaPlugin {
 
     private static Main plugin;
     private ClassManager classManager;
+    private boolean papiEnabled;
 
     private boolean decrease;
 
@@ -37,10 +39,11 @@ public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
-            getLogger().severe("Could not find PlaceholderAPI! This plugin is required.");
-            Bukkit.getPluginManager().disablePlugin(this);
-            return;
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            getLogger().info("PlaceholderAPI registered & hooked!");
+            papiEnabled = true;
+        }else{
+            papiEnabled = false;
         }
         classManager = new ClassManager();
         start();
@@ -83,7 +86,11 @@ public final class Main extends JavaPlugin {
                     }
 
                     for (Player p : Bukkit.getOnlinePlayers()) {
-                        if (p.getOpenInventory().getTitle().equals(PlaceholderAPI.setPlaceholders(p, classManager.getPluginConfig().getGuiTitle()))) {
+                        String title = classManager.getPluginConfig().getGuiTitle();
+                        if(isPapiEnabled()){
+                            title = PlaceholderAPI.setPlaceholders(p, title);
+                        }
+                        if (p.getOpenInventory().getTitle().equals(title)) {
                             Inventory inv = p.getOpenInventory().getTopInventory();
                             for (int i = 0; i < inv.getSize(); i++) {
                                 if (inv.getItem(i) == null) {
@@ -213,40 +220,88 @@ public final class Main extends JavaPlugin {
         return ChatColor.translateAlternateColorCodes('&', message);
     }
 
-    public static List<String> setPlaceholders(List<String> lore,Reward r,Player p){
+    public List<String> setPlaceholders(List<String> lore,Reward r,Player p){
         List<String> newlore = new ArrayList<>();
         for (String line : lore) {
-            if (line.contains("%creward_time%")) {
-                line = line.replace("%creward_time%", "%creward_time_" + r.getName() + "%");
+            if (!getPlugin().isPapiEnabled()) {
+                if (line.contains("%creward_time%")) {
+                    line = line.replace("%creward_time%", classManager.getPlayerManager().getTime(r,p.getUniqueId(),TimeFormat.TOTAL));
+                }
+                if (line.contains("%creward_hours%")) {
+                    line = line.replace("%creward_time%", classManager.getPlayerManager().getTime(r,p.getUniqueId(),TimeFormat.HOURS));
+                }
+                if (line.contains("%creward_minutes%")) {
+                    line = line.replace("%creward_time%", classManager.getPlayerManager().getTime(r,p.getUniqueId(),TimeFormat.MINUTES));
+                }
+                if (line.contains("%creward_seconds%")) {
+                    line = line.replace("%creward_time%", classManager.getPlayerManager().getTime(r,p.getUniqueId(),TimeFormat.SECONDS));
+                }if (line.contains("%creward_amount%")) {
+                    line = line.replace("%creward_amount%", String.valueOf(classManager.getPlayerManager().claimable(p.getUniqueId())));
+                }
+                newlore.add(line);
+            } else {
+                if (line.contains("%creward_time%")) {
+                    line = line.replace("%creward_time%", "%creward_time_" + r.getName() + "%");
+                }
+                if (line.contains("%creward_hours%")) {
+                    line = line.replace("%creward_hours%", "%creward_hours_" + r.getName() + "%");
+                }
+                if (line.contains("%creward_minutes%")) {
+                    line = line.replace("%creward_minutes%", "%creward_minutes_" + r.getName() + "%");
+                }
+                if (line.contains("%creward_seconds%")) {
+                    line = line.replace("%creward_seconds%", "%creward_seconds_" + r.getName() + "%");
+                }
+                newlore.add(PlaceholderAPI.setPlaceholders(p, line));
             }
-            if (line.contains("%creward_hours%")) {
-                line = line.replace("%creward_hours%", "%creward_hours_" + r.getName() + "%");
-            }
-            if (line.contains("%creward_minutes%")) {
-                line = line.replace("%creward_minutes%", "%creward_minutes_" + r.getName() + "%");
-            }
-            if (line.contains("%creward_seconds%")) {
-                line = line.replace("%creward_seconds%", "%creward_seconds_" + r.getName() + "%");
-            }
-            newlore.add(PlaceholderAPI.setPlaceholders(p, line));
         }
         return newlore;
     }
 
-    public static String setPlaceholders(String msg ,Reward r,Player p){
-        if (msg.contains("%creward_time%")) {
-            msg = msg.replace("%creward_time%", "%creward_time_" + r.getName() + "%");
+    public String setPlaceholders(String msg ,Reward r,Player p){
+        if(!getPlugin().isPapiEnabled()){
+            if (msg.contains("%creward_time%")) {
+                msg = msg.replace("%creward_time%", classManager.getPlayerManager().getTime(r,p.getUniqueId(), TimeFormat.TOTAL));
+            }
+            if (msg.contains("%creward_hours%")) {
+                msg = msg.replace("%creward_time%", classManager.getPlayerManager().getTime(r,p.getUniqueId(), TimeFormat.HOURS));
+            }
+            if (msg.contains("%creward_minutes%")) {
+                msg = msg.replace("%creward_time%", classManager.getPlayerManager().getTime(r,p.getUniqueId(), TimeFormat.MINUTES));
+            }
+            if (msg.contains("%creward_seconds%")) {
+                msg = msg.replace("%creward_time%", classManager.getPlayerManager().getTime(r,p.getUniqueId(), TimeFormat.SECONDS));
+            }if (msg.contains("%creward_amount%")) {
+                msg = msg.replace("%creward_amount%", String.valueOf(classManager.getPlayerManager().claimable(p.getUniqueId())));
+            }
         }
-        if (msg.contains("%creward_hours%")) {
-            msg = msg.replace("%creward_hours%", "%creward_hours_" + r.getName() + "%");
+        else {
+
+            if (msg.contains("%creward_time%")) {
+                msg = msg.replace("%creward_time%", "%creward_time_" + r.getName() + "%");
+            }
+            if (msg.contains("%creward_hours%")) {
+                msg = msg.replace("%creward_hours%", "%creward_hours_" + r.getName() + "%");
+            }
+            if (msg.contains("%creward_minutes%")) {
+                msg = msg.replace("%creward_minutes%", "%creward_minutes_" + r.getName() + "%");
+            }
+            if (msg.contains("%creward_seconds%")) {
+                msg = msg.replace("%creward_seconds%", "%creward_seconds_" + r.getName() + "%");
+            }
+            msg = PlaceholderAPI.setPlaceholders(p, msg);
         }
-        if (msg.contains("%creward_minutes%")) {
-            msg = msg.replace("%creward_minutes%", "%creward_minutes_" + r.getName() + "%");
+        return msg;
+    }
+
+    public String setPlaceholders(String msg, Player p){
+        if(isPapiEnabled()){
+            msg = PlaceholderAPI.setPlaceholders(p,msg);
         }
-        if (msg.contains("%creward_seconds%")) {
-            msg = msg.replace("%creward_seconds%", "%creward_seconds_" + r.getName() + "%");
-        }
-        return PlaceholderAPI.setPlaceholders(p, msg);
+        msg = msg.replaceAll("%player_name%",p.getName());
+        msg = msg.replaceAll("%player%",p.getName());
+        msg = msg.replaceAll("%creward_amount%",String.valueOf(classManager.getPlayerManager().claimable(p.getUniqueId())));
+        return msg;
     }
 
     public ClassManager getClassManager() {
@@ -311,5 +366,9 @@ public final class Main extends JavaPlugin {
                 e.printStackTrace();
             }
         }
+    }
+
+    public boolean isPapiEnabled() {
+        return papiEnabled;
     }
 }
