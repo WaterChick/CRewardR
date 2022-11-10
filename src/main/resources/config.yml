@@ -28,9 +28,7 @@ GUI:
       - 3
       - 4
     Item:
-      Material: STAINED_GLASS_PANE
-      #ID (Color) of the glass
-      Data: 7
+      Material: GRAY_STAINED_GLASS_PANE
   Rewards:
     daily:
       Item:
@@ -38,7 +36,6 @@ GUI:
         yesClaim:
           Item:
             Material: CHEST_MINECART
-            Data: 0
             skullData: '%player_name%'
             amount: 1
           Title: '&aDaily reward'
@@ -52,7 +49,6 @@ GUI:
         noClaim:
           Item:
             Material: MINECART
-            Data: 0
             skullData: '%player_name%'
             amount: 1
           Title: '&cDaily reward'
@@ -64,7 +60,6 @@ GUI:
         noPermClaim:
           Item:
             Material: BARRIER
-            Data: 0
             skullData: '%player_name%'
             amount: 1
           Title: '&cDaily reward'
