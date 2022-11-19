@@ -5,7 +5,7 @@
 - Free
 - 100% Configurable
 - PlaceholderAPI support
->%creward_time% - Shows time left in TOTAL (DD:HH:mm)
+>%creward_time% - Shows time left in TOTAL (DD:hh:mm:SS)
 >
 >%creward_hours% - Shows time left in HOURS
 >
