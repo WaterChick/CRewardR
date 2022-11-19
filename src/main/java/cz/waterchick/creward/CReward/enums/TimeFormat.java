@@ -5,5 +5,6 @@ public enum TimeFormat {
     TOTAL,
     SECONDS,
     MINUTES,
-    HOURS
+    HOURS,
+    DAYS
 }

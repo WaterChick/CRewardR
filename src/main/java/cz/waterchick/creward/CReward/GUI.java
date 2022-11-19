@@ -83,9 +83,8 @@ public class GUI {
             meta.setDisplayName(Main.Color(meta.getDisplayName()));
             List<String> newlore = new ArrayList<>();
             for(String line : meta.getLore()){
-                if(Main.getPlugin().isPapiEnabled()){
-                    line = PlaceholderAPI.setPlaceholders(p,line);
-                }
+                line = Main.Color(line);
+                line = Main.getPlugin().setPlaceholders(line,p);
                 newlore.add(line);
             }
             meta.setLore(newlore);

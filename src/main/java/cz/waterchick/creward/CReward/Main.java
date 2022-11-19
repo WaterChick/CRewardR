@@ -163,44 +163,6 @@ public final class Main extends JavaPlugin {
         return false;
     }
 
-    public static boolean LegacySound(){
-        String version = Bukkit.getVersion();
-        if(version.contains("1.8")){
-            return true;
-        }
-        if(version.contains("1.9")){
-            return false;
-        }
-        if(version.contains("1.10")){
-            return false;
-        }
-        if(version.contains("1.11")){
-            return false;
-        }
-        if(version.contains("1.12")){
-            return false;
-        }
-        if(version.contains("1.13")){
-            return false;
-        }
-        if(version.contains("1.14")){
-            return false;
-        }
-        if(version.contains("1.15")){
-            return false;
-        }
-        if(version.contains("1.16")){
-            return false;
-        }
-        if(version.contains("1.17")){
-            return false;
-        }
-        if(version.contains("1.18")){
-            return false;
-        }
-        return false;
-    }
-
     public static String Color(String message) {
         Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
         Matcher matcher = pattern.matcher(message);
@@ -337,15 +299,18 @@ public final class Main extends JavaPlugin {
             try {
                 List<String> tables = new ArrayList<>();
                 List<UUID> uuids = new ArrayList<>();
-                DatabaseMetaData dbmd = classManager.getDbManager().getConnection().getMetaData();
                 String[] types = {"TABLE"};
-                ResultSet rs = dbmd.getTables(null, null, "%", types);
+                DatabaseMetaData md = classManager.getDbManager().getConnection().getMetaData();
+                ResultSet rs = md.getTables(classManager.getDbManager().getConnection().getCatalog(), null, "%", types);
                 while (rs.next()) {
-                    if(!rs.getString("TABLE_NAME").equals("data")) {
-                        tables.add(rs.getString("TABLE_NAME"));
-                    }
+                    String tableName = rs.getString(3);
+                    tables.add(tableName);
                 }
                 for (String table : tables) {
+                    Reward reward = classManager.getRewardManager().getReward(table);
+                    if(reward == null){
+                        continue;
+                    }
                     String sql = "SELECT * from " + table;
                     PreparedStatement stmt = classManager.getDbManager().getConnection().prepareStatement(sql);
                     ResultSet resultSet = stmt.executeQuery();
@@ -355,7 +320,6 @@ public final class Main extends JavaPlugin {
                         }
                     }
                     for (UUID uuid : uuids) {
-                        Reward reward = classManager.getRewardManager().getReward(table);
                         Integer timeLeft = classManager.getDbManager().getTime(uuid, reward);
                         if (timeLeft != 0) {
                             classManager.getDbManager().insertTable(uuid, timeLeft - 1, reward);

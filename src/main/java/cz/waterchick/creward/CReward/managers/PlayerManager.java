@@ -35,19 +35,20 @@ public class PlayerManager {
             timeLeft = dbManager.getTime(uuid,reward);
         }else{
             timeLeft = dataConfig.getIntTime(reward,uuid);
+        }if(reward.getPermission() != null && !reward.getPermission().equalsIgnoreCase( "")) {
+            Player p = Bukkit.getPlayer(uuid);
+            if(p == null){
+                return ErrorType.NOPERM;
+            }
+            if (!p.hasPermission(reward.getPermission())) {
+                return ErrorType.NOPERM;
+            }
+        }
+        if(Bukkit.getPlayer(uuid) == null) {
+            return ErrorType.NOTIME;
         }
         if(timeLeft == 0){
-            if(reward.getPermission() != null && !reward.getPermission().equalsIgnoreCase( "")) {
-                if(Bukkit.getPlayer(uuid) != null) {
-                    if (Bukkit.getPlayer(uuid).hasPermission(reward.getPermission())) {
-                        return ErrorType.SUCC;
-                    } else {
-                        return ErrorType.NOPERM;
-                    }
-                }return ErrorType.NOTIME;
-            }else{
-                return ErrorType.SUCC;
-            }
+            return ErrorType.SUCC;
         }
         else{
             return ErrorType.NOTIME;
@@ -57,6 +58,9 @@ public class PlayerManager {
     public void claim(Reward reward, UUID uuid){
         String prefix = pluginConfig.getPrefix();
         Player p = Bukkit.getPlayer(uuid);
+        if(p == null){
+            return;
+        }
         if(canClaim(reward,uuid) == ErrorType.SUCC){
             if(pluginConfig.isCloseOnClaim()){
                 p.closeInventory();
@@ -122,15 +126,18 @@ public class PlayerManager {
         int hours = sec / 3600;
         int minutes = (sec % 3600) / 60;
         int seconds = sec % 60;
+        int days = hours / 24;
         switch (timeFormat){
             case TOTAL:
-                return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+                return String.format("%02dd %02dh %02dm %02ds",days, hours, minutes, seconds);
             case HOURS:
-                return String.format("%02d", hours);
+                return String.format("%02dh", hours);
+            case DAYS:
+                return String.format("%02dd", days);
             case MINUTES:
-                return String.format("%02d", minutes);
+                return String.format("%02dm", minutes);
             case SECONDS:
-                return String.format("%02d", seconds);
+                return String.format("%02ds", seconds);
         }
         return null;
     }

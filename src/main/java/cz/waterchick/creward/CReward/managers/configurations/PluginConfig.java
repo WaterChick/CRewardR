@@ -1,19 +1,14 @@
 package cz.waterchick.creward.CReward.managers.configurations;
 
 import cz.waterchick.creward.CReward.Main;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -66,16 +61,15 @@ public class PluginConfig {
     }
 
     public void createConfig() {
-        file = new File(Main.getPlugin().getDataFolder(), "config.yml");
+        file = new File(Main.getPlugin().getDataFolder(), "1.16/config.yml");
         if(Main.Legacy()){
-            file = new File(Main.getPlugin().getDataFolder(), "oldconfig.yml");
+            file = new File(Main.getPlugin().getDataFolder(), "1.8/config.yml");
         }
         if (!file.exists()) {
-            config = YamlConfiguration.loadConfiguration(file);
             if(Main.Legacy()) {
-                Main.getPlugin().saveResource("oldconfig.yml",false);
+                Main.getPlugin().saveResource("1.8/config.yml",false);
             }else{
-                Main.getPlugin().saveResource("config.yml",false);
+                Main.getPlugin().saveResource("1.16/config.yml",false);
             }
         }
         config = YamlConfiguration.loadConfiguration(file);
@@ -147,7 +141,7 @@ public class PluginConfig {
                 }
             }
         }catch (Exception e){
-            System.out.println("Error while loading Config! Don't forget to check material IDs and Sounds");
+            Main.getPlugin().getLogger().severe("Error while loading Config! Don't forget to check material IDs and Sounds");
             Main.getPlugin().disable();
             e.printStackTrace();
         }

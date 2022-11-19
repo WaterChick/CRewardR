@@ -4,8 +4,6 @@ import cz.waterchick.creward.CReward.Reward;
 import cz.waterchick.creward.CReward.managers.configurations.PluginConfig;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
