@@ -38,6 +38,7 @@ GUI:
             Material: CHEST_MINECART
             skullData: '%player_name%'
             amount: 1
+            Data: 0
           Title: '&aDaily reward'
           Lore: |2-
 
@@ -51,6 +52,7 @@ GUI:
             Material: MINECART
             skullData: '%player_name%'
             amount: 1
+            Data: 0
           Title: '&cDaily reward'
           Lore: |2-
 
@@ -62,6 +64,7 @@ GUI:
             Material: BARRIER
             skullData: '%player_name%'
             amount: 1
+            Data: 0
           Title: '&cDaily reward'
           Lore: |2-
 

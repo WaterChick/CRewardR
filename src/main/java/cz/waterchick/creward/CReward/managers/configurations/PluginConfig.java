@@ -1,6 +1,7 @@
 package cz.waterchick.creward.CReward.managers.configurations;
 
 import cz.waterchick.creward.CReward.Main;
+import cz.waterchick.creward.CReward.Utilities;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
@@ -62,11 +63,11 @@ public class PluginConfig {
 
     public void createConfig() {
         file = new File(Main.getPlugin().getDataFolder(), "1.16/config.yml");
-        if(Main.Legacy()){
+        if(Utilities.Legacy()){
             file = new File(Main.getPlugin().getDataFolder(), "1.8/config.yml");
         }
         if (!file.exists()) {
-            if(Main.Legacy()) {
+            if(Utilities.Legacy()) {
                 Main.getPlugin().saveResource("1.8/config.yml",false);
             }else{
                 Main.getPlugin().saveResource("1.16/config.yml",false);
@@ -84,28 +85,26 @@ public class PluginConfig {
 
     public void loadVars(){
         try {
-            prefix = Main.Color(config.getString("Messages.Prefix"));
-            yesClaim = Main.Color(config.getString("Messages.claim"));
-            noClaim = Main.Color(config.getString("Messages.noClaim"));
-            configReload = Main.Color(config.getString("Messages.configReload"));
-            reset = Main.Color(config.getString("Messages.reset"));
-            noPerm = Main.Color(config.getString("Messages.noPerm"));
-            readyToClaim = Main.Color(config.getString("Messages.readyToClaim"));
-            notify = Main.Color(config.getString("Messages.notify"));
-            autoClaim = Main.Color(config.getString("Messages.autoPickup"));
+            prefix = Utilities.Color(config.getString("Messages.Prefix"));
+            yesClaim = Utilities.Color(config.getString("Messages.claim"));
+            noClaim = Utilities.Color(config.getString("Messages.noClaim"));
+            configReload = Utilities.Color(config.getString("Messages.configReload"));
+            reset = Utilities.Color(config.getString("Messages.reset"));
+            noPerm = Utilities.Color(config.getString("Messages.noPerm"));
+            readyToClaim = Utilities.Color(config.getString("Messages.readyToClaim"));
+            notify = Utilities.Color(config.getString("Messages.notify"));
+            autoClaim = Utilities.Color(config.getString("Messages.autoPickup"));
             closeOnClaim = config.getBoolean("closeOnClaim");
 
             autoPickup = config.getBoolean("Autopickup.enabled");
             autoPickupPerm = config.getString("Autopickup.permission");
 
-            guiTitle = Main.Color(config.getString("GUI.title"));
+            guiTitle = Utilities.Color(config.getString("GUI.title"));
             guiRows = config.getInt("GUI.rows");
 
             guiFillerEnable = config.getBoolean("GUI.Filler.Enable");
             guiFillerItem = Material.getMaterial(config.getString("GUI.Filler.Item.Material"));
-            if (Main.Legacy()) {
-                guiFillerItemData = config.getInt("GUI.Filler.Item.Data");
-            }
+            guiFillerItemData = config.getInt("GUI.Filler.Item.Data");
             guiFillerSlots = config.getIntegerList("GUI.Filler.Slots");
 
             if(Main.getPlugin().getSound(config.getString("Sounds.OPEN_MENU.Sound")) == null || Main.getPlugin().getSound(config.getString("Sounds.REWARD_PICKUP.Sound")) == null){

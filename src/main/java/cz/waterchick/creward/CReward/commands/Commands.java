@@ -4,10 +4,10 @@ package cz.waterchick.creward.CReward.commands;
 import cz.waterchick.creward.CReward.GUI;
 import cz.waterchick.creward.CReward.Main;
 import cz.waterchick.creward.CReward.Reward;
+import cz.waterchick.creward.CReward.Utilities;
 import cz.waterchick.creward.CReward.managers.PlayerManager;
 import cz.waterchick.creward.CReward.managers.RewardManager;
 import cz.waterchick.creward.CReward.managers.configurations.PluginConfig;
-import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -34,7 +34,7 @@ public class Commands implements CommandExecutor {
             if(args.length == 0){
                 if(sender instanceof Player){
                     Player p = (Player) sender;
-                    gui.openGUI(p);
+                    gui.openInventory(p);
                 }
             }if(args.length == 1){
                 if(args[0].equalsIgnoreCase("reload")){
@@ -42,7 +42,7 @@ public class Commands implements CommandExecutor {
                         pluginConfig.reloadConfig();
                         rewardManager.loadRewards();
                         if(Main.getPlugin().isDisabled()){
-                            sender.sendMessage(pluginConfig.getPrefix() + Main.Color("&cErrors occured, check console"));
+                            sender.sendMessage(pluginConfig.getPrefix() + Utilities.Color("&cErrors occured, check console"));
                         }else {
                             sender.sendMessage(pluginConfig.getPrefix() + pluginConfig.getConfigReload());
                         }
@@ -53,12 +53,12 @@ public class Commands implements CommandExecutor {
                         return false;
                     }
                 }if(args[0].equalsIgnoreCase("help")){
-                    sender.sendMessage(Main.Color("&8&m--------------------------------"));
-                    sender.sendMessage(Main.Color("&2/cr | /creward &7- Shows the GUI"));
-                    sender.sendMessage(Main.Color("&2/cr reload &7- Reloads the plugin"));
-                    sender.sendMessage(Main.Color("&2/cr reset <reward> <player> &7- Reloads the player's reward time"));
-                    sender.sendMessage(Main.Color("&2/cr help &7- Shows this message"));
-                    sender.sendMessage(Main.Color("&8&m--------------------------------"));
+                    sender.sendMessage(Utilities.Color("&8&m--------------------------------"));
+                    sender.sendMessage(Utilities.Color("&2/cr | /creward &7- Shows the GUI"));
+                    sender.sendMessage(Utilities.Color("&2/cr reload &7- Reloads the plugin"));
+                    sender.sendMessage(Utilities.Color("&2/cr reset <reward> <player> &7- Reloads the player's reward time"));
+                    sender.sendMessage(Utilities.Color("&2/cr help &7- Shows this message"));
+                    sender.sendMessage(Utilities.Color("&8&m--------------------------------"));
                 }
             }if(args.length == 3){
                 if(args[0].equalsIgnoreCase("reset")){

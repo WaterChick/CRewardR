@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class PlayerManager {
 
@@ -117,19 +118,21 @@ public class PlayerManager {
     }
 
     public String getTime(Reward reward, UUID uuid, TimeFormat timeFormat){
-        int sec;
+        int seconds;
         if(pluginConfig.getEnable()){
-            sec = dbManager.getTime(uuid,reward);
+            seconds = dbManager.getTime(uuid,reward);
         }else {
-            sec = dataConfig.getIntTime(reward, uuid);
+            seconds = dataConfig.getIntTime(reward, uuid);
         }
-        int hours = sec / 3600;
-        int minutes = (sec % 3600) / 60;
-        int seconds = sec % 60;
-        int days = hours / 24;
+
+        long sec = seconds % 60;
+        long minutes = seconds % 3600 / 60;
+        long hours = seconds % 86400 / 3600;
+        long days = seconds / 86400;
+
         switch (timeFormat){
             case TOTAL:
-                return String.format("%02dd %02dh %02dm %02ds",days, hours, minutes, seconds);
+                return String.format("%02dd %02dh %02dm %02ds",days, hours, minutes, sec);
             case HOURS:
                 return String.format("%02dh", hours);
             case DAYS:
@@ -137,7 +140,7 @@ public class PlayerManager {
             case MINUTES:
                 return String.format("%02dm", minutes);
             case SECONDS:
-                return String.format("%02ds", seconds);
+                return String.format("%02ds", sec);
         }
         return null;
     }

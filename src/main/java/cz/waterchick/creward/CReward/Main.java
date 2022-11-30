@@ -13,9 +13,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -46,6 +50,13 @@ public final class Main extends JavaPlugin {
             papiEnabled = false;
         }
         classManager = new ClassManager();
+        new UpdateChecker(this,100822).getVersion(version -> {
+            if (this.getDescription().getVersion().equals(version)) {
+                getLogger().info("Plugin up to date! ("+version+")");
+            } else {
+                getLogger().warning("There is a new version available! ("+version+")");
+            }
+        });
         start();
 
     }
@@ -85,102 +96,12 @@ public final class Main extends JavaPlugin {
                         }
                     }
 
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        String title = classManager.getPluginConfig().getGuiTitle();
-                        if(isPapiEnabled()){
-                            title = PlaceholderAPI.setPlaceholders(p, title);
-                        }
-                        if (p.getOpenInventory().getTitle().equals(title)) {
-                            Inventory inv = p.getOpenInventory().getTopInventory();
-                            for (int i = 0; i < inv.getSize(); i++) {
-                                if (inv.getItem(i) == null) {
-                                    continue;
-                                }
-                                ItemStack invItem = inv.getItem(i).clone();
-                                if (invItem.getType() == Material.AIR) {
-                                    continue;
-                                }
-                                if (invItem.getType() == classManager.getPluginConfig().getGuiFillerItem()) {
-                                    continue;
-                                }
-                                UUID uuid = p.getUniqueId();
-                                Reward r = classManager.getRewardManager().getReward(i);
-                                if (r == null) {
-                                    continue;
-                                }
-                                ItemStack item = classManager.getGui().getRewardItem(r, uuid).clone();
-                                if (!item.getType().toString().equalsIgnoreCase("LEGACY_SKULL_ITEM") && !item.getType().toString().equalsIgnoreCase("SKULL_ITEM")) {
-                                    ItemMeta meta = item.getItemMeta();
-                                    meta.setLore(setPlaceholders(meta.getLore(), r, p));
-                                    item.setItemMeta(meta);
-                                    inv.setItem(i, item);
-                                }
-                            }
-                            p.updateInventory();
-                        }
-                    }
-
                 }
             },0, 20);
         }
     }
 
-    public static boolean Legacy(){
-        String version = Bukkit.getVersion();
-        if(version.contains("1.8")){
-            return true;
-        }
-        if(version.contains("1.9")){
-            return true;
-        }
-        if(version.contains("1.10")){
-            return true;
-        }
-        if(version.contains("1.11")){
-            return true;
-        }
-        if(version.contains("1.12")){
-            return true;
-        }
-        if(version.contains("1.13")){
-            return false;
-        }
-        if(version.contains("1.14")){
-            return false;
-        }
-        if(version.contains("1.15")){
-            return false;
-        }
-        if(version.contains("1.16")){
-            return false;
-        }
-        if(version.contains("1.17")){
-            return false;
-        }
-        if(version.contains("1.18")){
-            return false;
-        }
-        return false;
-    }
 
-    public static String Color(String message) {
-        Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
-        Matcher matcher = pattern.matcher(message);
-        while (matcher.find()) {
-            String hexCode = message.substring(matcher.start(), matcher.end());
-            String replaceSharp = hexCode.replace('#', 'x');
-
-            char[] ch = replaceSharp.toCharArray();
-            StringBuilder builder = new StringBuilder("");
-            for (char c : ch) {
-                builder.append("&" + c);
-            }
-
-            message = message.replace(hexCode, builder.toString());
-            matcher = pattern.matcher(message);
-        }
-        return ChatColor.translateAlternateColorCodes('&', message);
-    }
 
     public List<String> setPlaceholders(List<String> lore,Reward r,Player p){
         List<String> newlore = new ArrayList<>();
@@ -266,10 +187,6 @@ public final class Main extends JavaPlugin {
         return msg;
     }
 
-    public ClassManager getClassManager() {
-        return classManager;
-    }
-
     public boolean isDisabled(){
         if(!Bukkit.getPluginManager().isPluginEnabled(this)){
             return true;
@@ -306,6 +223,7 @@ public final class Main extends JavaPlugin {
                     String tableName = rs.getString(3);
                     tables.add(tableName);
                 }
+                rs.close();
                 for (String table : tables) {
                     Reward reward = classManager.getRewardManager().getReward(table);
                     if(reward == null){
@@ -319,6 +237,7 @@ public final class Main extends JavaPlugin {
                             uuids.add(UUID.fromString(resultSet.getString("uuid").replace("_", "-")));
                         }
                     }
+                    resultSet.close();
                     for (UUID uuid : uuids) {
                         Integer timeLeft = classManager.getDbManager().getTime(uuid, reward);
                         if (timeLeft != 0) {

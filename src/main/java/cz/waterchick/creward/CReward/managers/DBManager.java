@@ -3,7 +3,6 @@ package cz.waterchick.creward.CReward.managers;
 import cz.waterchick.creward.CReward.Main;
 import cz.waterchick.creward.CReward.Reward;
 import cz.waterchick.creward.CReward.managers.configurations.PluginConfig;
-import org.bukkit.Bukkit;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -85,6 +84,7 @@ public class DBManager {
                 PreparedStatement stmt = connection.prepareStatement(sql);
                 // use executeUpdate() to update the databases table.
                 stmt.executeUpdate();
+                stmt.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -104,6 +104,7 @@ public class DBManager {
                 PreparedStatement stmt = connection.prepareStatement(sql);
                 stmt.setBoolean(1, bool);
                 stmt.executeUpdate();
+                stmt.close();
                 return true;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -126,6 +127,7 @@ public class DBManager {
             try {
                 PreparedStatement stmt = connection.prepareStatement(sql);
                 stmt.executeUpdate();
+                stmt.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -146,6 +148,7 @@ public class DBManager {
                 } else {
                     b = results.getInt("time");
                 }
+                results.close();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -168,7 +171,13 @@ public class DBManager {
                 PreparedStatement stmt = connection.prepareStatement(sql);
                 stmt.setString(1, uuidS);
                 ResultSet resultSet = stmt.executeQuery();
-                if (!resultSet.next()) return false; else return true;
+                if (!resultSet.next()) {
+                    resultSet.close();
+                    return false;
+                }else {
+                    resultSet.close();
+                    return true;
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -184,7 +193,13 @@ public class DBManager {
             try {
                 PreparedStatement stmt = connection.prepareStatement(sql);
                 ResultSet resultSet = stmt.executeQuery();
-                if (!resultSet.next()) return false; else return true;
+                if (!resultSet.next()) {
+                    resultSet.close();
+                    return false;
+                }else {
+                    resultSet.close();
+                    return true;
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -208,11 +223,32 @@ public class DBManager {
                 } else {
                     b = results.getBoolean("decrease");
                 }
+                results.close();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
             return b;
         }
         return null;
+    }
+
+    public List<String> getTables() {
+        if (!MySQLIsConnected()) {
+            return new ArrayList<>();
+        }
+        try {
+            List<String> tables = new ArrayList<>();
+            String[] types = {"TABLE"};
+            DatabaseMetaData md = getConnection().getMetaData();
+            ResultSet rs = md.getTables(getConnection().getCatalog(), null, "%", types);
+            while (rs.next()) {
+                String tableName = rs.getString(3);
+                tables.add(tableName);
+            }
+            rs.close();
+            return tables;
+        }catch (SQLException e){
+            return new ArrayList<>();
+        }
     }
 }

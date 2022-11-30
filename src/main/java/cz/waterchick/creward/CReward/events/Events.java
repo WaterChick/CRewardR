@@ -21,12 +21,10 @@ public class Events implements Listener {
     private PluginConfig pluginConfig;
     private PlayerManager playerManager;
     private RewardManager rewardManager;
-    private GUI gui;
 
-    public Events(PluginConfig pluginConfig,PlayerManager playerManager,GUI gui,RewardManager rewardManager){
+    public Events(PluginConfig pluginConfig, PlayerManager playerManager, RewardManager rewardManager){
         this.pluginConfig = pluginConfig;
         this.playerManager = playerManager;
-        this.gui = gui;
         this.rewardManager = rewardManager;
     }
 

@@ -1,6 +1,7 @@
 package cz.waterchick.creward.CReward;
 
 import cz.waterchick.creward.CReward.Main;
+import cz.waterchick.creward.CReward.enums.ErrorType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -16,13 +17,9 @@ public class Reward {
 
     private String permission;
 
-    private ItemStack yesItem;
-
     private Integer yesSlot;
 
     private String yesSkullData;
-
-    private ItemStack noItem;
 
     private Integer noSlot;
 
@@ -32,11 +29,13 @@ public class Reward {
 
     private Integer cooldown;
 
-    private ItemStack noPermItem;
-
     private Integer noPermSlot;
 
     private String noPermSkullData;
+
+    private CItem noCItem;
+    private CItem yesCItem;
+    private CItem noPermCItem;
 
 
 
@@ -58,14 +57,14 @@ public class Reward {
                         String skullData = yesSection.getString("Item.skullData");
                         yesSkullData = skullData;
                         Integer amount = yesSection.getInt("Item.amount");
-                        String title = Main.Color(yesSection.getString("Title"));
+                        String title = Utilities.Color(yesSection.getString("Title"));
                         Integer slot = yesSection.getInt("Slot");
                         String permission = yesSection.getString("Permission");
                         this.permission = permission;
                         List<String> lore = new ArrayList<>();
                         if (yesSection.getString("Lore") != null) {
                             for (String line : yesSection.getString("Lore").split("\n")) {
-                                lore.add(Main.Color(line));
+                                lore.add(Utilities.Color(line));
                             }
 
                         }
@@ -75,12 +74,7 @@ public class Reward {
                             return;
                         }
                         this.yesSlot = slot;
-                        ItemStack yesItem = new ItemStack(mat, amount, (short) data);
-                        ItemMeta meta = yesItem.getItemMeta();
-                        meta.setDisplayName(title);
-                        meta.setLore(lore);
-                        yesItem.setItemMeta(meta);
-                        this.yesItem = yesItem;
+                        this.yesCItem = new CItem(mat,amount,title,lore,(short) data);
                     }
                     if(claim.equalsIgnoreCase("noclaim")) {
                         ConfigurationSection noSection = section.getConfigurationSection("Item" + ".noClaim");
@@ -94,12 +88,12 @@ public class Reward {
                         String skullData = noSection.getString("Item.skullData");
                         noSkullData = skullData;
                         Integer amount = noSection.getInt("Item.amount");
-                        String title = Main.Color(noSection.getString("Title"));
+                        String title = Utilities.Color(noSection.getString("Title"));
                         Integer slot = noSection.getInt("Slot");
                         List<String> lore = new ArrayList<>();
                         if (noSection.getString("Lore") != null) {
                             for (String line : noSection.getString("Lore").split("\n")) {
-                                lore.add(Main.Color(line));
+                                lore.add(Utilities.Color(line));
                             }
 
                         }
@@ -108,12 +102,7 @@ public class Reward {
                             continue;
                         }
                         this.noSlot = slot;
-                        ItemStack yesItem = new ItemStack(mat, amount, (short) data);
-                        ItemMeta meta = yesItem.getItemMeta();
-                        meta.setDisplayName(title);
-                        meta.setLore(lore);
-                        yesItem.setItemMeta(meta);
-                        this.noItem = yesItem;
+                        this.noCItem = new CItem(mat,amount,title,lore,(short) data);
                     }
                     if(claim.equalsIgnoreCase("nopermclaim")) {
                         ConfigurationSection noPermSection = section.getConfigurationSection("Item" + ".noPermClaim");
@@ -127,12 +116,12 @@ public class Reward {
                         String skullData = noPermSection.getString("Item.skullData");
                         noPermSkullData = skullData;
                         Integer amount = noPermSection.getInt("Item.amount");
-                        String title = Main.Color(noPermSection.getString("Title"));
+                        String title = Utilities.Color(noPermSection.getString("Title"));
                         Integer slot = noPermSection.getInt("Slot");
                         List<String> lore = new ArrayList<>();
                         if (noPermSection.getString("Lore") != null) {
                             for (String line : noPermSection.getString("Lore").split("\n")) {
-                                lore.add(Main.Color(line));
+                                lore.add(Utilities.Color(line));
                             }
 
                         }
@@ -142,12 +131,7 @@ public class Reward {
                             return;
                         }
                         this.noPermSlot = slot;
-                        ItemStack noPermItem = new ItemStack(mat, amount, (short) data);
-                        ItemMeta meta = noPermItem.getItemMeta();
-                        meta.setDisplayName(title);
-                        meta.setLore(lore);
-                        noPermItem.setItemMeta(meta);
-                        this.noPermItem = noPermItem;
+                        this.noPermCItem = new CItem(mat,amount,title,lore,(short) data);
                     }
                 }
             }if(key.equals("Commands")){
@@ -162,28 +146,12 @@ public class Reward {
         return name;
     }
 
-    public ItemStack getYesItem() {
-        return yesItem;
-    }
-
     public Integer getYesSlot() {
         return yesSlot;
     }
 
-    public String getYesSkullData() {
-        return yesSkullData;
-    }
-
-    public ItemStack getNoItem() {
-        return noItem;
-    }
-
     public Integer getNoSlot() {
         return noSlot;
-    }
-
-    public String getNoSkullData() {
-        return noSkullData;
     }
 
     public List<String> getCommands() {
@@ -198,15 +166,40 @@ public class Reward {
         return cooldown;
     }
 
-    public ItemStack getNoPermItem() {
-        return noPermItem;
-    }
-
     public Integer getNoPermSlot() {
         return noPermSlot;
     }
 
-    public String getNoPermSkullData() {
-        return noPermSkullData;
+    public CItem getItemStack(ErrorType errorType){
+        switch (errorType){
+            case SUCC:
+                return yesCItem;
+            case NOPERM:
+                return noPermCItem;
+            default:
+                return noCItem;
+        }
+    }
+
+    public Integer getSlot(ErrorType errorType){
+        switch (errorType){
+            case SUCC:
+                return yesSlot;
+            case NOPERM:
+                return noPermSlot;
+            default:
+                return noSlot;
+        }
+    }
+
+    public String getSkullData(ErrorType errorType){
+        switch (errorType){
+            case SUCC:
+                return yesSkullData;
+            case NOPERM:
+                return noPermSkullData;
+            default:
+                return noSkullData;
+        }
     }
 }
