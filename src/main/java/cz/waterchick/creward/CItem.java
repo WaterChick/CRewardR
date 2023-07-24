@@ -2,6 +2,8 @@ package cz.waterchick.creward;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -14,6 +16,8 @@ public class CItem {
     private String title;
     private List<String> lore;
     private int data;
+
+    private boolean glow;
     private Integer amount;
     private String skullData;
 
@@ -24,6 +28,7 @@ public class CItem {
         Material mat = Material.getMaterial(section.getString("Material"));
         int data = section.getInt("Data");
         String skullData = section.getString("skullData");
+        boolean glow = section.getBoolean("Glow");
         Integer amount = section.getInt("Amount");
         String title = Utilities.Color(section.getString("Title"));
         List<String> lore = new ArrayList<>();
@@ -42,12 +47,13 @@ public class CItem {
         this.title = title;
         this.lore = lore;
         this.data = data;
+        this.glow = glow;
     }
 
     public ItemStack getItemStack(){
-        ItemStack itemStack = null;
+        ItemStack itemStack;
         if(material == null){
-            return itemStack;
+            return new ItemStack(Material.BEDROCK);
         }
         if (data != 0){
             itemStack = new ItemStack(material, 1, (short) data);
@@ -59,11 +65,16 @@ public class CItem {
 
         meta.setDisplayName(title);
         meta.setLore(lore);
+
         itemStack.setItemMeta(meta);
         return itemStack;
     }
 
     public String getSkullData() {
         return skullData;
+    }
+
+    public boolean isGlow(){
+        return glow;
     }
 }

@@ -38,7 +38,8 @@ GUI:
         yesClaim:
           Item:
             Material: CHEST_MINECART
-            skullData: '%player_name%'
+            #skullData: '%player_name%'
+            glow: true
             Amount: 1
             Data: 0
             Title: '&aDaily reward'
@@ -49,7 +50,7 @@ GUI:
         noClaim:
           Item:
             Material: MINECART
-            skullData: '%player_name%'
+            #skullData: '%player_name%'
             Amount: 1
             Data: 0
             Title: '&cDaily reward'
@@ -60,7 +61,7 @@ GUI:
         noPermClaim:
           Item:
             Material: BARRIER
-            skullData: '%player_name%'
+            #skullData: '%player_name%'
             Amount: 1
             Data: 0
             Title: '&cDaily reward'
@@ -82,7 +83,7 @@ GUI:
       Item:
         Material: BARRIER
         Data: 0
-        skullData: '%player_name%'
+        #skullData: '%player_name%'
         Amount: 1
       Slot: 12
 Sounds:

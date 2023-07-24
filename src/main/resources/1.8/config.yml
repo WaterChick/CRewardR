@@ -41,7 +41,8 @@ GUI:
           Item:
             Material: STORAGE_MINECART
             Data: 0
-            skullData: '%player_name%'
+            #skullData: '%player_name%'
+            glow: true
             Amount: 1
             Title: '&aDaily reward'
             Lore:
@@ -52,7 +53,7 @@ GUI:
           Item:
             Material: MINECART
             Data: 0
-            skullData: '%player_name%'
+            #skullData: '%player_name%'
             Amount: 1
             Title: '&cDaily reward'
             Lore:
@@ -63,7 +64,7 @@ GUI:
           Item:
             Material: BARRIER
             Data: 0
-            skullData: '%player_name%'
+            #skullData: '%player_name%'
             Amount: 1
             Title: '&cDaily reward'
             Lore:
@@ -85,7 +86,7 @@ GUI:
       Item:
         Material: BARRIER
         Data: 0
-        skullData: '%player_name%'
+        #skullData: '%player_name%'
         Amount: 1
       Slot: 12
 Sounds:

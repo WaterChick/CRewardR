@@ -10,9 +10,11 @@ import cz.waterchick.creward.managers.configurations.PluginConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -125,7 +127,11 @@ public class GUI {
                         }
                         meta.setLore(lore);
                     }
+                    meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     itemStack.setItemMeta(meta);
+                    if(cItem.isGlow()) {
+                        itemStack.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
+                    }
                     inventory.setItem(slot,itemStack);
                 }
                 for(Map.Entry<CItem,Integer> entry : pluginConfig.getOtherItems().entrySet()){
@@ -160,7 +166,11 @@ public class GUI {
                         }
                         meta.setLore(lore);
                     }
+                    meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     itemStack.setItemMeta(meta);
+                    if(cItem.isGlow()) {
+                        itemStack.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
+                    }
                     inventory.setItem(slot,itemStack);
                 }
             }

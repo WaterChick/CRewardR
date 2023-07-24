@@ -39,7 +39,7 @@ public class PlaceholderAPI extends PlaceholderExpansion {
     @Override
     public boolean canRegister() {
         return true;
-        
+
     }
 
     @Override
@@ -56,12 +56,12 @@ public class PlaceholderAPI extends PlaceholderExpansion {
         if(reward == null){
             return "";
         }
-        if(playerManager.canClaim(reward,player.getUniqueId()) == ErrorType.SUCC){
-            return pluginConfig.getReadyToClaim();
-        }
         String identifier = params.split("_")[0];
         if(identifier.equalsIgnoreCase("amount")) return String.valueOf(playerManager.getAmount(player.getUniqueId()));
 
+        if(playerManager.canClaim(reward,player.getUniqueId()) == ErrorType.SUCC){
+            return pluginConfig.getReadyToClaim();
+        }
         if(playerManager.canClaim(reward,player.getUniqueId()) == ErrorType.NOTIME) {
             TimeFormat timeFormat = TimeFormat.getTimeFormat(identifier);
             if(timeFormat == null) {
