@@ -39,6 +39,7 @@ public class PlaceholderAPI extends PlaceholderExpansion {
     @Override
     public boolean canRegister() {
         return true;
+        
     }
 
     @Override
