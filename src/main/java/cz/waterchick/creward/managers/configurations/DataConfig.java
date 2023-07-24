@@ -1,7 +1,7 @@
-package cz.waterchick.creward.CReward.managers.configurations;
+package cz.waterchick.creward.managers.configurations;
 
-import cz.waterchick.creward.CReward.Main;
-import cz.waterchick.creward.CReward.Reward;
+import cz.waterchick.creward.CReward;
+import cz.waterchick.creward.managers.reward.Reward;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -11,15 +11,22 @@ import java.util.UUID;
 
 public class DataConfig {
 
+    private static DataConfig instance;
+
     private FileConfiguration config;
     private File file;
 
     public DataConfig(){
+        instance = this;
         createConfig();
     }
 
+    public static DataConfig getInstance() {
+        return instance;
+    }
+
     public void createConfig(){
-        file = new File(Main.getPlugin().getDataFolder(),"db.yml");
+        file = new File(CReward.getPlugin().getDataFolder(),"db.yml");
         if(!file.exists()){
             config = YamlConfiguration.loadConfiguration(file);
             saveConfig();

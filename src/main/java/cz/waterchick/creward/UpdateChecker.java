@@ -1,4 +1,4 @@
-package cz.waterchick.creward.CReward;
+package cz.waterchick.creward;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;

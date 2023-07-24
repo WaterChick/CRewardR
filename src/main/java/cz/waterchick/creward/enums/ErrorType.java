@@ -1,4 +1,4 @@
-package cz.waterchick.creward.CReward.enums;
+package cz.waterchick.creward.enums;
 
 public enum ErrorType {
     NOPERM,

@@ -8,17 +8,17 @@ Messages:
   readyToClaim: '&aReady to claim!'
   notify: '&7You can claim &a%creward_amount% &7reward(s)!'
   autoPickup: '&7Auto-Claimed &a%rewards% &7reward(s) (Premium)'
-#Auto picks up all rewards for player after joining
-#If false, player gets only a notification
+# Auto picks up all rewards for player after joining
+# If false, player gets only a notification
 Autopickup:
   enabled: false
   permission: creward.autoclaim
-#Should the GUI close after claiming a reward
+# Should the GUI close after claiming a reward
 closeOnClaim: true
 GUI:
   title: '&8Daily reward'
   rows: 5
-  #Glass Filler for the GUI
+  # Glass Filler for the GUI
   Filler:
     Enable: true
     Slots:
@@ -32,65 +32,61 @@ GUI:
       #ID (Color) of the glass
       Data: 7
   Rewards:
-    daily:
+    # Cant be just a number! (ex. '5')
+    # Will cause problems when using MySQL
+    'daily':
       Item:
-        #Reward claimable
+        # Reward claimable
         yesClaim:
           Item:
             Material: STORAGE_MINECART
             Data: 0
             skullData: '%player_name%'
-            amount: 1
-          Title: '&aDaily reward'
-          Lore: |2-
-
-            &fClick to claim
-          Slot: 10
-          #Permission to claim this reward
-          Permission: ''
-        #Waiting for reward
+            Amount: 1
+            Title: '&aDaily reward'
+            Lore:
+              - ''
+              - '&fClick to claim'
+        # Waiting for reward
         noClaim:
           Item:
             Material: MINECART
             Data: 0
             skullData: '%player_name%'
-            amount: 1
-          Title: '&cDaily reward'
-          Lore: |2-
-
-            &7Come back again in &f%creward_time%
-          Slot: 10
-        #No permission for reward
+            Amount: 1
+            Title: '&cDaily reward'
+            Lore:
+              - ''
+              - '&7Come back again in &f%creward_time%'
+        # No permission for reward
         noPermClaim:
           Item:
             Material: BARRIER
             Data: 0
             skullData: '%player_name%'
-            amount: 1
-          Title: '&cDaily reward'
-          Lore: |2-
-
-            &cNo permission
-          Slot: 10
-      #Commands executed after claiming
+            Amount: 1
+            Title: '&cDaily reward'
+            Lore:
+              - ''
+              - '&cNo permission'
+      # Commands executed after claiming
       Commands:
         - give %player_name% diamond 64
         - give %player_name% golden_apple 2
-      #Cooldown for the reward, in seconds
+      # Cooldown for the reward, in seconds
       Cooldown: 86400
-  #Items for designing the GUI
+      # Item slot
+      Slot: 10
+      # Permission to claim this reward
+      Permission: ''
+  # Items for designing the GUI
   otherItems:
-    item1:
+    'item1':
       Item:
-        ==: org.bukkit.inventory.ItemStack
-        type: IRON_INGOT
-        meta:
-          ==: ItemMeta
-          meta-type: UNSPECIFIC
-          display-name: '&aItem 1'
-          lore:
-            - '&cLore'
-            - '&eLore2'
+        Material: BARRIER
+        Data: 0
+        skullData: '%player_name%'
+        Amount: 1
       Slot: 12
 Sounds:
   OPEN_MENU:

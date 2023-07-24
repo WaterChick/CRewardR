@@ -1,7 +1,7 @@
-package cz.waterchick.creward.CReward.managers;
+package cz.waterchick.creward.managers.reward;
 
-import cz.waterchick.creward.CReward.Reward;
-import cz.waterchick.creward.CReward.managers.configurations.PluginConfig;
+import cz.waterchick.creward.managers.DBManager;
+import cz.waterchick.creward.managers.configurations.PluginConfig;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -12,18 +12,22 @@ import java.util.Map;
 
 public class RewardManager {
 
-    private PluginConfig pluginConfig;
-    private DBManager dbManager;
+    private static RewardManager instance;
+
+    public static RewardManager getInstance() {
+        return instance;
+    }
 
     private HashMap<String, Reward> rewardHashMap = new HashMap<>();
 
-    public RewardManager(PluginConfig pluginConfig, DBManager dbManager){
-        this.pluginConfig = pluginConfig;
-        this.dbManager = dbManager;
+    public RewardManager(){
+        instance = this;
         loadRewards();
     }
 
     public void loadRewards(){
+        PluginConfig pluginConfig = PluginConfig.getInstance();
+        DBManager dbManager = DBManager.getInstance();
         rewardHashMap.clear();
         FileConfiguration config = pluginConfig.getConfig();
         ConfigurationSection section = config.getConfigurationSection("GUI.Rewards");
@@ -38,16 +42,10 @@ public class RewardManager {
         for(Map.Entry<String,Reward> entry : rewardHashMap.entrySet()){
             Reward reward = entry.getValue();
 
-            if(slot == reward.getYesSlot()){
-                return reward;
+            if(slot != reward.getSlot()){
+                continue;
             }
-            if(slot == reward.getNoSlot()){
-                return reward;
-            }
-            if(slot == reward.getNoPermSlot()){
-                return reward;
-            }
-            continue;
+            return reward;
         }
         return null;
     }

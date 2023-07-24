@@ -1,4 +1,4 @@
-package cz.waterchick.creward.CReward;
+package cz.waterchick.creward;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -43,10 +43,19 @@ public class Utilities {
         if(version.contains("1.18")){
             return false;
         }
+        if(version.contains("1.19")){
+            return false;
+        }
+        if(version.contains("1.20")){
+            return false;
+        }
         return false;
     }
 
     public static String Color(String message) {
+        if(message == null){
+            return message;
+        }
         Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
         Matcher matcher = pattern.matcher(message);
         while (matcher.find()) {

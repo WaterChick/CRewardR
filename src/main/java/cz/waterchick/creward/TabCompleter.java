@@ -1,6 +1,7 @@
-package cz.waterchick.creward.CReward;
+package cz.waterchick.creward;
 
-import cz.waterchick.creward.CReward.managers.RewardManager;
+import cz.waterchick.creward.managers.reward.Reward;
+import cz.waterchick.creward.managers.reward.RewardManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -14,8 +15,8 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
 
     private RewardManager rewardManager;
 
-    public TabCompleter(RewardManager rewardManager){
-        this.rewardManager = rewardManager;
+    public TabCompleter(){
+        this.rewardManager = RewardManager.getInstance();
     }
 
     @Override
@@ -30,11 +31,15 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
             return result;
         }
         if(args.length == 2) {
+            if(!args[0].equalsIgnoreCase("reset")){
+                return result;
+            }
             for(Reward reward : rewardManager.getRewards()){
                 if(reward.getName().toLowerCase().startsWith(args[1].toLowerCase())){
                     result.add(reward.getName());
                 }
             }
+            result.add("*");
             return result;
         }
         return null;

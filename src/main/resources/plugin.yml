@@ -1,10 +1,11 @@
 name: CReward
 version: ${project.version}
-main: cz.waterchick.creward.CReward.Main
+main: cz.waterchick.creward.CReward
 api-version: 1.16
 authors: [ Water_Chick ]
 softdepend:
   - PlaceholderAPI
+  - HeadDatabase
 commands:
   creward:
     aliases:

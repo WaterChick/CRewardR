@@ -1,13 +1,13 @@
-package cz.waterchick.creward.CReward.managers.configurations;
+package cz.waterchick.creward.managers.configurations;
 
-import cz.waterchick.creward.CReward.Main;
-import cz.waterchick.creward.CReward.Utilities;
+import cz.waterchick.creward.CItem;
+import cz.waterchick.creward.CReward;
+import cz.waterchick.creward.Utilities;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.HashMap;
@@ -18,6 +18,8 @@ public class PluginConfig {
     private FileConfiguration config;
     private File file;
 
+    private static PluginConfig instance;
+
     private String prefix;
     private String yesClaim;
     private String noClaim;
@@ -26,7 +28,6 @@ public class PluginConfig {
     private String noPerm;
     private String readyToClaim;
     private String notify;
-    private String noPermInGUI;
     private String autoClaim;
     private boolean autoPickup;
     private String autoPickupPerm;
@@ -54,23 +55,28 @@ public class PluginConfig {
     private String adress;
     private String db;
 
-    private HashMap<ItemStack, Integer> otherItems = new HashMap<>();
+    private HashMap<CItem, Integer> otherItems = new HashMap<>();
 
 
     public PluginConfig() {
+        instance = this;
         createConfig();
     }
 
+    public static PluginConfig getInstance() {
+        return instance;
+    }
+
     public void createConfig() {
-        file = new File(Main.getPlugin().getDataFolder(), "1.16/config.yml");
+        file = new File(CReward.getPlugin().getDataFolder(), "1.16/config.yml");
         if(Utilities.Legacy()){
-            file = new File(Main.getPlugin().getDataFolder(), "1.8/config.yml");
+            file = new File(CReward.getPlugin().getDataFolder(), "1.8/config.yml");
         }
         if (!file.exists()) {
             if(Utilities.Legacy()) {
-                Main.getPlugin().saveResource("1.8/config.yml",false);
+                CReward.getPlugin().saveResource("1.8/config.yml",false);
             }else{
-                Main.getPlugin().saveResource("1.16/config.yml",false);
+                CReward.getPlugin().saveResource("1.16/config.yml",false);
             }
         }
         config = YamlConfiguration.loadConfiguration(file);
@@ -107,9 +113,9 @@ public class PluginConfig {
             guiFillerItemData = config.getInt("GUI.Filler.Item.Data");
             guiFillerSlots = config.getIntegerList("GUI.Filler.Slots");
 
-            if(Main.getPlugin().getSound(config.getString("Sounds.OPEN_MENU.Sound")) == null || Main.getPlugin().getSound(config.getString("Sounds.REWARD_PICKUP.Sound")) == null){
-                Main.getPlugin().getLogger().severe("Error while parsing sounds");
-                Main.getPlugin().disable();
+            if(CReward.getPlugin().getSound(config.getString("Sounds.OPEN_MENU.Sound")) == null || CReward.getPlugin().getSound(config.getString("Sounds.REWARD_PICKUP.Sound")) == null){
+                CReward.getPlugin().getLogger().severe("Error while parsing sounds");
+                CReward.getPlugin().disable();
                 return;
             }
 
@@ -133,15 +139,15 @@ public class PluginConfig {
             if (config.get("GUI.otherItems") != null) {
                 if (section != null) {
                     for (String key : section.getKeys(false)) {
-                        ItemStack item = config.getItemStack("GUI.otherItems." + key + ".Item");
-                        Integer slot = config.getInt("GUI.otherItems." + key + ".Slot");
-                        otherItems.put(item, slot);
+                        CItem cItem = new CItem(section.getConfigurationSection(key+".Item"));
+                        Integer slot = section.getInt(key+".Slot");
+                        otherItems.put(cItem, slot);
                     }
                 }
             }
         }catch (Exception e){
-            Main.getPlugin().getLogger().severe("Error while loading Config! Don't forget to check material IDs and Sounds");
-            Main.getPlugin().disable();
+            CReward.getPlugin().getLogger().severe("Error while loading Config! Don't forget to check material IDs and Sounds");
+            CReward.getPlugin().disable();
             e.printStackTrace();
         }
     }
@@ -198,7 +204,7 @@ public class PluginConfig {
         return guiFillerItemData;
     }
 
-    public HashMap<ItemStack, Integer> getOtherItems() {
+    public HashMap<CItem, Integer> getOtherItems() {
         return otherItems;
     }
 
@@ -208,10 +214,6 @@ public class PluginConfig {
 
     public String getNotify() {
         return notify;
-    }
-
-    public String getNoPermInGUI() {
-        return noPermInGUI;
     }
 
     public String getAutoClaim() {

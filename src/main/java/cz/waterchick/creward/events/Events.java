@@ -1,15 +1,14 @@
-package cz.waterchick.creward.CReward.events;
+package cz.waterchick.creward.events;
 
-import cz.waterchick.creward.CReward.GUI;
-import cz.waterchick.creward.CReward.Main;
-import cz.waterchick.creward.CReward.Reward;
-import cz.waterchick.creward.CReward.managers.PlayerManager;
-import cz.waterchick.creward.CReward.managers.RewardManager;
-import cz.waterchick.creward.CReward.managers.configurations.PluginConfig;
-import me.clip.placeholderapi.PlaceholderAPI;
+import cz.waterchick.creward.CReward;
+import cz.waterchick.creward.managers.reward.Reward;
+import cz.waterchick.creward.managers.PlayerManager;
+import cz.waterchick.creward.managers.reward.RewardManager;
+import cz.waterchick.creward.managers.configurations.PluginConfig;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import cz.waterchick.creward.dependencies.PlaceholderAPI;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
@@ -22,10 +21,10 @@ public class Events implements Listener {
     private PlayerManager playerManager;
     private RewardManager rewardManager;
 
-    public Events(PluginConfig pluginConfig, PlayerManager playerManager, RewardManager rewardManager){
-        this.pluginConfig = pluginConfig;
-        this.playerManager = playerManager;
-        this.rewardManager = rewardManager;
+    public Events(){
+        this.pluginConfig = PluginConfig.getInstance();
+        this.playerManager = PlayerManager.getInstance();
+        this.rewardManager = RewardManager.getInstance();
     }
 
     @EventHandler
@@ -33,8 +32,8 @@ public class Events implements Listener {
         Player p = (Player) e.getWhoClicked();
         UUID uuid = p.getUniqueId();
         String title = pluginConfig.getGuiTitle();
-        if(Main.getPlugin().isPapiEnabled()){
-            title = PlaceholderAPI.setPlaceholders(p,title);
+        if(CReward.getPlugin().isPapiEnabled()){
+            title = PlaceholderAPI.setPlaceholders(title,null,p);
         }
         if(p.getOpenInventory().getTitle().equals(title)){
             e.setCancelled(true);
@@ -56,7 +55,7 @@ public class Events implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e){
         Player p = e.getPlayer();
-        Main.getPlugin().getServer().getScheduler().runTaskLater(Main.getPlugin(), new Runnable() {
+        CReward.getPlugin().getServer().getScheduler().runTaskLater(CReward.getPlugin(), new Runnable() {
             @Override
             public void run() {
                 if(playerManager.claimable(p.getUniqueId()) > 0) {
@@ -71,7 +70,10 @@ public class Events implements Listener {
                         return;
                     }
                     String msg = pluginConfig.getNotify();
-                    p.sendMessage(pluginConfig.getPrefix() + Main.getPlugin().setPlaceholders(msg,p));
+                    if(CReward.getPlugin().isPapiEnabled()){
+                        msg = PlaceholderAPI.setPlaceholders(msg,null,p);
+                    }
+                    p.sendMessage(pluginConfig.getPrefix() + msg);
                 }
             }
         }, 20L * 3);

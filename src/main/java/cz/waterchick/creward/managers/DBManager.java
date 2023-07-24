@@ -1,8 +1,8 @@
-package cz.waterchick.creward.CReward.managers;
+package cz.waterchick.creward.managers;
 
-import cz.waterchick.creward.CReward.Main;
-import cz.waterchick.creward.CReward.Reward;
-import cz.waterchick.creward.CReward.managers.configurations.PluginConfig;
+import cz.waterchick.creward.CReward;
+import cz.waterchick.creward.managers.reward.Reward;
+import cz.waterchick.creward.managers.configurations.PluginConfig;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,6 +11,8 @@ import java.util.UUID;
 
 public class DBManager {
 
+    private static DBManager instance;
+
     private Boolean enable;
     private String username;
     private String password; // Enter your password for the db
@@ -18,11 +20,13 @@ public class DBManager {
     private String adress;
     private String url;
 
-    private static Connection connection;
-    private PluginConfig pluginConfig;
+    private final PluginConfig pluginConfig;
 
-    public DBManager(PluginConfig pluginConfig){
-        this.pluginConfig = pluginConfig;
+    private static Connection connection;
+
+    public DBManager(){
+        instance = this;
+        this.pluginConfig = PluginConfig.getInstance();
         this.enable = pluginConfig.getEnable();
         this.username = pluginConfig.getUsername();
         this.password = pluginConfig.getPassword();
@@ -31,22 +35,26 @@ public class DBManager {
         this.url = "jdbc:mysql://"+adress+"/"+db;
         if(enable) {
             connStart();
-            Main.getPlugin().getLogger().info("Using MYSQL to save Reward times!");
+            CReward.getPlugin().getLogger().info("Using MYSQL to save Reward times!");
         }else{
-            Main.getPlugin().getLogger().info("Using FILE to save Reward times!");
+            CReward.getPlugin().getLogger().info("Using FILE to save Reward times!");
         }
+    }
+
+    public static DBManager getInstance() {
+        return instance;
     }
 
     private void connStart(){
         try { // try catch to get any SQL errors (for example connections errors)
             connection = DriverManager.getConnection(url, username, password);
-            Main.getPlugin().getLogger().info("Database connection established!");
+            CReward.getPlugin().getLogger().info("Database connection established!");
             createDecreaser();
             // with the method getConnection() from DriverManager, we're trying to set
             // the connection's url, username, password to the variables we made earlier and
             // trying to get a connection at the same time. JDBC allows us to do this.
         } catch (SQLException e) { // catching errors
-            Main.getPlugin().getLogger().severe("There are some problems connecting to your database!");
+            CReward.getPlugin().getLogger().severe("There are some problems connecting to your database!");
             e.printStackTrace(); // prints out SQLException errors to the console (if any)
         }
     }
@@ -55,7 +63,7 @@ public class DBManager {
         if(MySQLIsConnected()) {
             try {
                 connection.close();
-                Main.getPlugin().getLogger().info("Database connection closed!");
+                CReward.getPlugin().getLogger().info("Database connection closed!");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -139,7 +147,7 @@ public class DBManager {
             Integer b = 0;
             String uuidS = uuid.toString().replaceAll("-", "_");
             String name = reward.getName();
-            String sql = "SELECT * FROM " + name + " WHERE " + "uuid=?;"; // Note the question mark as placeholders for input values
+            String sql = "SELECT * FROM " + name + " WHERE uuid = ?"; // Note the question mark as placeholders for input values
             try {
                 PreparedStatement stmt = connection.prepareStatement(sql);
                 stmt.setString(1, uuidS);// Set first "?" to query string
