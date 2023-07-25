@@ -28,7 +28,7 @@ public class PlaceholderAPI extends PlaceholderExpansion {
 
     @Override
     public String getVersion() {
-        return "2.2.7";
+        return "2.2.8";
     }
 
     @Override
