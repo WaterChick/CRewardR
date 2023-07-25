@@ -111,9 +111,6 @@ public class GUI {
                             itemStack = HDBAPI.getHead(cItem.getSkullData());
                         }
                     }
-                    if(itemStack == null){
-                        continue;
-                    }
                     ItemMeta meta = itemStack.getItemMeta();
                     ItemMeta orgMeta = cItem.getItemStack().getItemMeta();
                     Integer slot = reward.getSlot();
@@ -150,9 +147,6 @@ public class GUI {
                         }else{
                             itemStack = HDBAPI.getHead(cItem.getSkullData());
                         }
-                    }
-                    if(itemStack == null){
-                        continue;
                     }
                     ItemMeta meta = itemStack.getItemMeta();
                     ItemMeta orgMeta = cItem.getItemStack().getItemMeta();

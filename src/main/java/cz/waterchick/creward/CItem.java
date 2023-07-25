@@ -38,7 +38,7 @@ public class CItem {
             }
 
         }
-        if (mat == null || amount == null || (Integer) data == null) {
+        if (mat == null || amount == null) {
             return;
         }
         this.material = mat;

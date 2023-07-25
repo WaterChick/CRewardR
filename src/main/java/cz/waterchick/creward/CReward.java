@@ -7,6 +7,7 @@ import cz.waterchick.creward.managers.configurations.PluginConfig;
 import cz.waterchick.creward.managers.reward.Reward;
 import cz.waterchick.creward.managers.reward.RewardManager;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -39,9 +40,14 @@ public final class CReward extends JavaPlugin {
         classManager = new ClassManager();
         new UpdateChecker(this,100822).getVersion(version -> {
             if (this.getDescription().getVersion().equals(version)) {
-                getLogger().info("Plugin up to date! ("+version+")");
+                getLogger().info(ChatColor.GREEN + "Plugin up to date! ("+version+")");
             } else {
-                getLogger().warning("There is a new version available! ("+version+")");
+                getLogger().warning(ChatColor.DARK_GRAY + "-------------------------------");
+                getLogger().warning("");
+                getLogger().warning(ChatColor.RED + "There is a new version available! ("+version+")");
+                getLogger().warning(ChatColor.YELLOW + "Download it here: https://www.spigotmc.org/resources/100822");
+                getLogger().warning("");
+                getLogger().warning(ChatColor.DARK_GRAY + "-------------------------------");
             }
         });
         start();

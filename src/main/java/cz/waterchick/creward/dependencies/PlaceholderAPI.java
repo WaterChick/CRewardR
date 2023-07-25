@@ -53,12 +53,12 @@ public class PlaceholderAPI extends PlaceholderExpansion {
         }catch (ArrayIndexOutOfBoundsException e){
 
         }
-        if(reward == null){
-            return "";
-        }
         String identifier = params.split("_")[0];
         if(identifier.equalsIgnoreCase("amount")) return String.valueOf(playerManager.getAmount(player.getUniqueId()));
 
+        if(reward == null){
+            return "";
+        }
         if(playerManager.canClaim(reward,player.getUniqueId()) == ErrorType.SUCC){
             return pluginConfig.getReadyToClaim();
         }
