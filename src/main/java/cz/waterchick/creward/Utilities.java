@@ -25,30 +25,6 @@ public class Utilities {
         if(version.contains("1.12")){
             return true;
         }
-        if(version.contains("1.13")){
-            return false;
-        }
-        if(version.contains("1.14")){
-            return false;
-        }
-        if(version.contains("1.15")){
-            return false;
-        }
-        if(version.contains("1.16")){
-            return false;
-        }
-        if(version.contains("1.17")){
-            return false;
-        }
-        if(version.contains("1.18")){
-            return false;
-        }
-        if(version.contains("1.19")){
-            return false;
-        }
-        if(version.contains("1.20")){
-            return false;
-        }
         return false;
     }
 

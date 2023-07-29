@@ -28,17 +28,17 @@ public class GUI {
 
     private static GUI instance;
 
-    private final PluginConfig pluginConfig;
-    private final RewardManager rewardManager;
-    private final PlayerManager playerManager;
+    private PluginConfig pluginConfig;
+    private RewardManager rewardManager;
+    private PlayerManager playerManager;
 
-    public final String title;
-    private final Integer rows;
+    public String title;
+    private Integer rows;
 
-    private final Material fillerMaterial;
-    private final int fillerItemData;
-    private final List<Integer> fillerSlots;
-    private final boolean fillerEnabled;
+    private Material fillerMaterial;
+    private int fillerItemData;
+    private List<Integer> fillerSlots;
+    private boolean fillerEnabled;
 
     private Sound openSound;
     private int openPitch;
@@ -46,21 +46,7 @@ public class GUI {
 
     public GUI(){
         instance = this;
-        this.pluginConfig = PluginConfig.getInstance();
-        this.rewardManager = RewardManager.getInstance();
-        this.playerManager = PlayerManager.getInstance();
-
-        this.title = pluginConfig.getGuiTitle();
-        this.rows = pluginConfig.getGuiRows();
-
-        this.fillerMaterial = pluginConfig.getGuiFillerItem();
-        this.fillerSlots = pluginConfig.getGuiFillerSlots();
-        this.fillerEnabled = pluginConfig.isGuiFillerEnable();
-        this.fillerItemData = pluginConfig.getGuiFillerItemData();
-
-        this.openSound = pluginConfig.getOpenSound();
-        this.openPitch = pluginConfig.getOpenPitch();
-        this.openVolume = pluginConfig.getOpenVolume();
+        loadVars();
     }
 
     public static GUI getInstance() {
@@ -76,6 +62,8 @@ public class GUI {
         p.openInventory(inv);
 
         p.playSound(p.getLocation(),openSound,openVolume,openPitch);
+
+        loadVars();
 
         updateInventory(p);
     }
@@ -191,4 +179,22 @@ public class GUI {
         return fillerEnabled;
     }
 
+
+    private void loadVars(){
+        this.pluginConfig = PluginConfig.getInstance();
+        this.rewardManager = RewardManager.getInstance();
+        this.playerManager = PlayerManager.getInstance();
+
+        this.title = pluginConfig.getGuiTitle();
+        this.rows = pluginConfig.getGuiRows();
+
+        this.fillerMaterial = pluginConfig.getGuiFillerItem();
+        this.fillerSlots = pluginConfig.getGuiFillerSlots();
+        this.fillerEnabled = pluginConfig.isGuiFillerEnable();
+        this.fillerItemData = pluginConfig.getGuiFillerItemData();
+
+        this.openSound = pluginConfig.getOpenSound();
+        this.openPitch = pluginConfig.getOpenPitch();
+        this.openVolume = pluginConfig.getOpenVolume();
+    }
 }
