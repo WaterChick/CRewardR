@@ -10,6 +10,7 @@ import cz.waterchick.creward.managers.configurations.DataConfig;
 import cz.waterchick.creward.managers.configurations.PluginConfig;
 import cz.waterchick.creward.managers.gui.GUI;
 import cz.waterchick.creward.managers.reward.RewardManager;
+import org.bukkit.command.PluginCommand;
 
 public class ClassManager {
 
@@ -20,9 +21,11 @@ public class ClassManager {
         new RewardManager();
         new PlayerManager();
         new GUI();
-        CReward.getPlugin().getCommand("creward").setExecutor(new Commands());
+        PluginCommand cmd = CReward.getPlugin().getCommand("creward");
+        cmd.setTabCompleter(new TabCompleter());
+        cmd.setExecutor(new Commands());
+
         CReward.getPlugin().getServer().getPluginManager().registerEvents(new Events(), CReward.getPlugin());
-        CReward.getPlugin().getCommand("creward").setTabCompleter(new TabCompleter());
         if(CReward.getPlugin().isPapiEnabled()) {
             new PlaceholderAPI().register();
         }

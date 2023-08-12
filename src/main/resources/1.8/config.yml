@@ -8,13 +8,21 @@ Messages:
   readyToClaim: '&aReady to claim!'
   notify: '&7You can claim &a%creward_amount% &7reward(s)!'
   autoPickup: '&7Auto-Claimed &a%rewards% &7reward(s) (Premium)'
+
 # Auto picks up all rewards for player after joining
 # If false, player gets only a notification
 Autopickup:
   enabled: false
   permission: creward.autoclaim
+
 # Should the GUI close after claiming a reward
 closeOnClaim: true
+
+# Aliases for the command
+aliases:
+  - /rewards
+  - /daily
+
 GUI:
   title: '&8Daily reward'
   rows: 5
@@ -89,6 +97,7 @@ GUI:
         #skullData: '%player_name%'
         Amount: 1
       Slot: 12
+
 Sounds:
   OPEN_MENU:
     Sound: CHEST_OPEN
@@ -98,6 +107,7 @@ Sounds:
     Sound: CHICKEN_EGG_POP
     Volume: 1
     Pitch: 4
+
 MySQL:
   enable: false
   username: root

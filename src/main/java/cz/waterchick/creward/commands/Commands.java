@@ -30,11 +30,11 @@ public class Commands implements CommandExecutor {
         this.pluginConfig = PluginConfig.getInstance();
         this.playerManager = PlayerManager.getInstance();
         this.rewardManager = RewardManager.getInstance();
+
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(label.equalsIgnoreCase("creward") || label.equalsIgnoreCase("cr")){
             if(args.length == 0){
                 if(sender instanceof Player){
                     Player p = (Player) sender;
@@ -99,7 +99,6 @@ public class Commands implements CommandExecutor {
                         return false;
                     }
                 }
-            }
         }
         return false;
     }

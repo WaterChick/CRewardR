@@ -10,9 +10,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import cz.waterchick.creward.dependencies.PlaceholderAPI;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
 import java.util.UUID;
 
 public class Events implements Listener {
@@ -70,6 +72,9 @@ public class Events implements Listener {
                         return;
                     }
                     String msg = pluginConfig.getNotify();
+                    if(msg.equalsIgnoreCase("")){
+                        return;
+                    }
                     if(CReward.getPlugin().isPapiEnabled()){
                         msg = PlaceholderAPI.setPlaceholders(msg,null,p);
                     }
@@ -77,6 +82,23 @@ public class Events implements Listener {
                 }
             }
         }, 20L * 3);
+
+    }
+
+    @EventHandler
+    public void OnCommand(PlayerCommandPreprocessEvent event){
+        String message = event.getMessage();
+        String[] sMsg = message.split(" ");
+        List<String> alias = PluginConfig.getInstance().getAliases();
+        for (String aliasTemp : alias) {
+            if (sMsg[0].equalsIgnoreCase(aliasTemp)) {
+                String messageJ = "/cr";
+                for (int i = 1; i < sMsg.length; i++) {
+                    messageJ = messageJ + " " + sMsg[i];
+                }
+                event.setMessage(messageJ);
+            }
+        }
 
     }
 }

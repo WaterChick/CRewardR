@@ -10,6 +10,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,6 +35,8 @@ public class PluginConfig {
     private boolean autoPickup;
     private String autoPickupPerm;
     private boolean closeOnClaim;
+
+    private List<String> aliases;
 
     private Sound openSound;
     private int openVolume;
@@ -80,6 +85,8 @@ public class PluginConfig {
             }
         }
         config = YamlConfiguration.loadConfiguration(file);
+        checkDefaults();
+        config = YamlConfiguration.loadConfiguration(file);
         loadVars();
     }
 
@@ -102,6 +109,8 @@ public class PluginConfig {
             autoClaim = Utilities.Color(config.getString("Messages.autoPickup"));
             closeOnClaim = config.getBoolean("closeOnClaim");
 
+            aliases = config.getStringList("aliases");
+
             autoPickup = config.getBoolean("Autopickup.enabled");
             autoPickupPerm = config.getString("Autopickup.permission");
 
@@ -115,7 +124,6 @@ public class PluginConfig {
 
             if(CReward.getPlugin().getSound(config.getString("Sounds.OPEN_MENU.Sound")) == null || CReward.getPlugin().getSound(config.getString("Sounds.REWARD_PICKUP.Sound")) == null){
                 CReward.getPlugin().getLogger().severe("Error while parsing sounds");
-                CReward.getPlugin().disable();
                 return;
             }
 
@@ -274,6 +282,29 @@ public class PluginConfig {
 
     public String getDb() {
         return db;
+    }
+
+    public List<String> getAliases() {
+        if(aliases == null){
+            return new ArrayList<>();
+        }
+        return aliases;
+    }
+
+    public void checkDefaults(){
+        // update 2.3
+        if(!config.contains("aliases")){
+            config.set("aliases", new ArrayList<>(Arrays.asList("rewards", "daily")));
+        }
+        save();
+    }
+
+    public void save(){
+        try {
+            config.save(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 
