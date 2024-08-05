@@ -126,16 +126,8 @@ public final class CReward extends JavaPlugin {
         }
         if(decrease) {
             try {
-                List<String> tables = new ArrayList<>();
+                List<String> tables = DBManager.getInstance().getTables();
                 List<UUID> uuids = new ArrayList<>();
-                String[] types = {"TABLE"};
-                DatabaseMetaData md = dbManager.getConnection().getMetaData();
-                ResultSet rs = md.getTables(dbManager.getConnection().getCatalog(), null, "%", types);
-                while (rs.next()) {
-                    String tableName = rs.getString(3);
-                    tables.add(tableName);
-                }
-                rs.close();
                 for (String table : tables) {
                     Reward reward = rewardManager.getReward(table);
                     if(reward == null){
