@@ -33,7 +33,7 @@ public class CItem {
         String title = Utilities.Color(section.getString("Title"));
         List<String> lore = new ArrayList<>();
         if (section.getString("Lore") != null) {
-            for (String line : section.getString("Lore").split("\n")) {
+            for (String line : section.getStringList("Lore")) {
                 lore.add(Utilities.Color(line));
             }
 

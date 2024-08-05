@@ -60,7 +60,7 @@ public class Events implements Listener {
         CReward.getPlugin().getServer().getScheduler().runTaskLater(CReward.getPlugin(), new Runnable() {
             @Override
             public void run() {
-                if(playerManager.claimable(p.getUniqueId()) > 0) {
+                if(playerManager.getAmount(p.getUniqueId()) > 0) {
                     if (p.hasPermission(pluginConfig.getAutoPickupPerm())) {
                         if(pluginConfig.isAutoPickup()) {
                             int i = playerManager.claimAll(p.getUniqueId());

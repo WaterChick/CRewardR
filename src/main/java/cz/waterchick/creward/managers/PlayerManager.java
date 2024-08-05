@@ -178,17 +178,6 @@ public class PlayerManager {
         return null;
     }
 
-    public int claimable(UUID uuid){
-        RewardManager rewardManager = RewardManager.getInstance();
-        int i = 0;
-        for(Reward r : rewardManager.getRewards()){
-            if(canClaim(r, uuid) == ErrorType.SUCC){
-                i++;
-            }
-        }
-        return i;
-    }
-
     public int claimAll(UUID uuid){
         RewardManager rewardManager = RewardManager.getInstance();
         int i = 0;
