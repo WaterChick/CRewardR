@@ -51,9 +51,9 @@ GUI:
             Amount: 1
             Data: 0
             Title: '&aDaily reward'
-            Lore: |2-
-
-              &fClick to claim
+            Lore:
+              - ''
+              - '&fClick to claim'
         # Waiting for reward
         noClaim:
           Item:
@@ -62,9 +62,9 @@ GUI:
             Amount: 1
             Data: 0
             Title: '&cDaily reward'
-            Lore: |2-
-
-              &7Come back again in &f%creward_time%
+            Lore:
+              - ''
+              - '&7Come back again in &f%creward_time%'
         # No permission for reward
         noPermClaim:
           Item:
@@ -73,9 +73,9 @@ GUI:
             Amount: 1
             Data: 0
             Title: '&cDaily reward'
-            Lore: |2-
-
-              &cNo permission
+            Lore:
+              - ''
+              - '&cNo permission'
       # Commands executed after claiming
       Commands:
         - give %player_name% diamond 64
