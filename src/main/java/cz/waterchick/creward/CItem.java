@@ -1,5 +1,6 @@
 package cz.waterchick.creward;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
@@ -32,7 +33,7 @@ public class CItem {
         Integer amount = section.getInt("Amount");
         String title = Utilities.Color(section.getString("Title"));
         List<String> lore = new ArrayList<>();
-        if (section.getString("Lore") != null) {
+        if (section.getStringList("Lore") != null) {
             for (String line : section.getStringList("Lore")) {
                 lore.add(Utilities.Color(line));
             }
