@@ -52,7 +52,7 @@ public class Commands implements CommandExecutor {
                         }
                     }else{
                         Player p = (Player) sender;
-                        String msg = pluginConfig.getReset();
+                        String msg = pluginConfig.getNoPerm();
                         if(CReward.getPlugin().isPapiEnabled()){
                             msg = PlaceholderAPI.setPlaceholders(msg,null,p);
                         }
