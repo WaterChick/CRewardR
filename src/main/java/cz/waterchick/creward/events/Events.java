@@ -61,34 +61,7 @@ public class Events implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e){
         Player p = e.getPlayer();
-        CReward.getPlugin().getServer().getScheduler().runTaskLater(CReward.getPlugin(), new Runnable() {
-            @Override
-            public void run() {
-                if(playerManager.getAmount(p.getUniqueId()) > 0) {
-                    if (p.hasPermission(pluginConfig.getAutoPickupPerm())) {
-                        if(pluginConfig.isAutoPickup()) {
-                            int i = playerManager.claimAll(p.getUniqueId());
-                            p.sendMessage(pluginConfig.getPrefix() + pluginConfig.getAutoClaim().replace("%rewards%", i + ""));
-                            return;
-                        }
-                    }
-                    if(pluginConfig.getNotify().equalsIgnoreCase("false") || pluginConfig.getNotify() == null){
-                        return;
-                    }
-                    TextComponent msg = new TextComponent(pluginConfig.getNotify());
-
-                    if(CReward.getPlugin().isPapiEnabled()){
-                        msg.setText(PlaceholderAPI.setPlaceholders(msg.getText(),null,p));
-                    }
-                    boolean hoverEnabled = pluginConfig.isHoverEnabled();
-                    if(hoverEnabled){
-                        msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new ComponentBuilder(pluginConfig.getHoverMessage()).create()));
-                        msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, pluginConfig.getHoverCommand()));
-                    }
-                    p.spigot().sendMessage(new TextComponent(pluginConfig.getPrefix()), msg);
-                }
-            }
-        }, 20L * 3);
+        playerManager.sendNotification(p);
 
     }
 

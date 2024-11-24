@@ -15,15 +15,20 @@ import org.bukkit.command.PluginCommand;
 public class ClassManager {
 
     public ClassManager(){
-        new PluginConfig();
+        PluginConfig pluginConfig = new PluginConfig();
         new DataConfig();
         new DBManager();
         new RewardManager();
-        new PlayerManager();
+        PlayerManager playerManager = new PlayerManager();
         new GUI();
         PluginCommand cmd = CReward.getPlugin().getCommand("creward");
         cmd.setTabCompleter(new TabCompleter());
         cmd.setExecutor(new Commands());
+
+        boolean isAutoNotificationEnabled = pluginConfig.isAutoNotificationEnabled();
+        if(isAutoNotificationEnabled){
+            playerManager.createNotifyRunnable();
+        }
 
         CReward.getPlugin().getServer().getPluginManager().registerEvents(new Events(), CReward.getPlugin());
         if(CReward.getPlugin().isPapiEnabled()) {

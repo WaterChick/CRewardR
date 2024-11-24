@@ -15,8 +15,19 @@ Autopickup:
   enabled: false
   permission: creward.autoclaim
 
+# Periodical auto notification, when player has some unclaimed rewards
+Autonotification:
+  enable: false
+  notifyInSeconds: 3600
+
 # Should the GUI close after claiming a reward
 closeOnClaim: true
+
+# Notify hover
+hover:
+  enable: true
+  message: '&eClick to open Rewards menu'
+  command: '/cr'
 
 # Aliases for the command
 aliases:
@@ -116,8 +127,3 @@ MySQL:
   password: ''
   adress: localhost:3306
   db: creward
-
-hover:
-  enable: true
-  message: '&eClick to open Rewards menu'
-  command: '/cr'

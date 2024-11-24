@@ -8,6 +8,10 @@ import cz.waterchick.creward.managers.configurations.DataConfig;
 import cz.waterchick.creward.managers.configurations.PluginConfig;
 import cz.waterchick.creward.managers.reward.RewardManager;
 import cz.waterchick.creward.dependencies.PlaceholderAPI;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -188,5 +192,51 @@ public class PlayerManager {
             }
         }
         return i;
+    }
+
+    public void sendNotification(Player p){
+        PluginConfig pluginConfig = PluginConfig.getInstance();
+        CReward.getPlugin().getServer().getScheduler().runTaskLater(CReward.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                if(getAmount(p.getUniqueId()) > 0) {
+                    if (p.hasPermission(pluginConfig.getAutoPickupPerm())) {
+                        if(pluginConfig.isAutoPickup()) {
+                            int i = claimAll(p.getUniqueId());
+                            p.sendMessage(pluginConfig.getPrefix() + pluginConfig.getAutoClaim().replace("%rewards%", i + ""));
+                            return;
+                        }
+                    }
+                    if(pluginConfig.getNotify().equalsIgnoreCase("false") || pluginConfig.getNotify() == null){
+                        return;
+                    }
+                    TextComponent msg = new TextComponent(pluginConfig.getNotify());
+
+                    if(CReward.getPlugin().isPapiEnabled()){
+                        msg.setText(PlaceholderAPI.setPlaceholders(msg.getText(),null,p));
+                    }
+                    boolean hoverEnabled = pluginConfig.isHoverEnabled();
+                    if(hoverEnabled){
+                        msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new ComponentBuilder(pluginConfig.getHoverMessage()).create()));
+                        msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, pluginConfig.getHoverCommand()));
+                    }
+                    p.spigot().sendMessage(new TextComponent(pluginConfig.getPrefix()), msg);
+                }
+            }
+        }, 20L * 3);
+    }
+
+    public void createNotifyRunnable() {
+        PluginConfig pluginConfig = PluginConfig.getInstance();
+        int autoNotifyInSeconds = pluginConfig.getAutoNotifyInSeconds();
+        Bukkit.getScheduler().runTaskTimerAsynchronously(CReward.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                for(Player player : Bukkit.getOnlinePlayers()){
+                    sendNotification(player);
+                }
+            }
+        }, 0L, 20L * autoNotifyInSeconds);
+
     }
 }

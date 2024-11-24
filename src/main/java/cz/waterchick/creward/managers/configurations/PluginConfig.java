@@ -3,11 +3,13 @@ package cz.waterchick.creward.managers.configurations;
 import cz.waterchick.creward.CItem;
 import cz.waterchick.creward.CReward;
 import cz.waterchick.creward.Utilities;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,6 +67,9 @@ public class PluginConfig {
     private String hoverMessage;
     private String hoverCommand;
 
+    private boolean autoNotificationEnabled;
+    private int autoNotifyInSeconds;
+
     private HashMap<CItem, Integer> otherItems = new HashMap<>();
 
 
@@ -79,14 +84,14 @@ public class PluginConfig {
 
     public void createConfig() {
         file = new File(CReward.getPlugin().getDataFolder(), "1.16/config.yml");
-        if(Utilities.Legacy()){
+        if (Utilities.Legacy()) {
             file = new File(CReward.getPlugin().getDataFolder(), "1.8/config.yml");
         }
         if (!file.exists()) {
-            if(Utilities.Legacy()) {
-                CReward.getPlugin().saveResource("1.8/config.yml",false);
-            }else{
-                CReward.getPlugin().saveResource("1.16/config.yml",false);
+            if (Utilities.Legacy()) {
+                CReward.getPlugin().saveResource("1.8/config.yml", false);
+            } else {
+                CReward.getPlugin().saveResource("1.16/config.yml", false);
             }
         }
         config = YamlConfiguration.loadConfiguration(file);
@@ -101,7 +106,7 @@ public class PluginConfig {
     }
 
 
-    public void loadVars(){
+    public void loadVars() {
         try {
             prefix = Utilities.Color(config.getString("Messages.Prefix"));
             yesClaim = Utilities.Color(config.getString("Messages.claim"));
@@ -128,7 +133,7 @@ public class PluginConfig {
             guiFillerSlots = config.getIntegerList("GUI.Filler.Slots");
             fillerDisplayName = config.getBoolean("GUI.Filler.Item.DisplayName");
 
-            if(CReward.getPlugin().getSound(config.getString("Sounds.OPEN_MENU.Sound")) == null || CReward.getPlugin().getSound(config.getString("Sounds.REWARD_PICKUP.Sound")) == null){
+            if (CReward.getPlugin().getSound(config.getString("Sounds.OPEN_MENU.Sound")) == null || CReward.getPlugin().getSound(config.getString("Sounds.REWARD_PICKUP.Sound")) == null) {
                 CReward.getPlugin().getLogger().severe("Error while parsing sounds");
                 return;
             }
@@ -152,49 +157,52 @@ public class PluginConfig {
             hoverMessage = Utilities.Color(config.getString("hover.message"));
             hoverCommand = config.getString("hover.command");
 
+            autoNotificationEnabled = config.getBoolean("Autonotification.enable");
+            autoNotifyInSeconds = config.getInt("Autonotification.notifyInSeconds");
+
             otherItems.clear();
             ConfigurationSection section = config.getConfigurationSection("GUI.otherItems");
             if (config.get("GUI.otherItems") != null) {
                 if (section != null) {
                     for (String key : section.getKeys(false)) {
-                        CItem cItem = new CItem(section.getConfigurationSection(key+".Item"));
-                        Integer slot = section.getInt(key+".Slot");
+                        CItem cItem = new CItem(section.getConfigurationSection(key + ".Item"));
+                        Integer slot = section.getInt(key + ".Slot");
                         otherItems.put(cItem, slot);
                     }
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             CReward.getPlugin().getLogger().severe("Error while loading Config! Don't forget to check material IDs and Sounds");
             CReward.getPlugin().disable();
             e.printStackTrace();
         }
     }
 
-    public String getPrefix () {
+    public String getPrefix() {
         return prefix;
     }
 
-    public String getYesClaim () {
+    public String getYesClaim() {
         return yesClaim;
     }
 
-    public String getNoClaim () {
+    public String getNoClaim() {
         return noClaim;
     }
 
-    public String getGuiTitle () {
+    public String getGuiTitle() {
         return guiTitle;
     }
 
-    public int getGuiRows () {
+    public int getGuiRows() {
         return guiRows;
     }
 
-    public boolean isGuiFillerEnable () {
+    public boolean isGuiFillerEnable() {
         return guiFillerEnable;
     }
 
-    public List<Integer> getGuiFillerSlots () {
+    public List<Integer> getGuiFillerSlots() {
         return guiFillerSlots;
     }
 
@@ -295,29 +303,33 @@ public class PluginConfig {
     }
 
     public List<String> getAliases() {
-        if(aliases == null){
+        if (aliases == null) {
             return new ArrayList<>();
         }
         return aliases;
     }
 
-    public void checkDefaults(){
+    public void checkDefaults() {
         // update 2.3
-        if(!config.contains("aliases")){
+        if (!config.contains("aliases")) {
             config.set("aliases", new ArrayList<>(Arrays.asList("rewards", "daily")));
         }
-        if(!config.contains("GUI.Filler.Item.DisplayName")){
+        if (!config.contains("GUI.Filler.Item.DisplayName")) {
             config.set("GUI.Filler.Item.DisplayName", false);
         }
-        if(!config.contains("hover")){
+        if (!config.contains("hover")) {
             config.set("hover.enable", true);
             config.set("hover.message", "&eClick to open Rewards menu");
             config.set("hover.command", "/cr");
         }
+        if(!config.contains("Autonotification")){
+            config.set("Autonotification.enable", false);
+            config.set("Autonotification.notifyInSeconds", 3600);
+        }
         save();
     }
 
-    public void save(){
+    public void save() {
         try {
             config.save(file);
         } catch (IOException e) {
@@ -339,6 +351,14 @@ public class PluginConfig {
 
     public String getHoverCommand() {
         return hoverCommand;
+    }
+
+    public boolean isAutoNotificationEnabled() {
+        return autoNotificationEnabled;
+    }
+
+    public int getAutoNotifyInSeconds() {
+        return autoNotifyInSeconds;
     }
 }
 
