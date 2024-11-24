@@ -30,7 +30,7 @@ public class CItem {
         int data = section.getInt("Data");
         String skullData = section.getString("skullData");
         boolean glow = section.getBoolean("Glow");
-        Integer amount = section.getInt("Amount");
+        int amount = section.getInt("Amount");
         String title = Utilities.Color(section.getString("Title"));
         List<String> lore = new ArrayList<>();
         if (section.getStringList("Lore") != null) {
@@ -39,7 +39,7 @@ public class CItem {
             }
 
         }
-        if (mat == null || amount == null) {
+        if (mat == null) {
             return;
         }
         this.material = mat;

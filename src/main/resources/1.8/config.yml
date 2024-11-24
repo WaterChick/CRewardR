@@ -37,8 +37,10 @@ GUI:
       - 4
     Item:
       Material: STAINED_GLASS_PANE
-      #ID (Color) of the glass
+      # ID (Color) of the glass
       Data: 7
+      # Should the display name be visible?
+      DisplayName: false
   Rewards:
     # Cant be just a number! (ex. '5')
     # Will cause problems when using MySQL

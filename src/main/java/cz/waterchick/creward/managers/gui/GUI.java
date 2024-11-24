@@ -2,6 +2,7 @@ package cz.waterchick.creward.managers.gui;
 
 import cz.waterchick.creward.CItem;
 import cz.waterchick.creward.CReward;
+import cz.waterchick.creward.Utilities;
 import cz.waterchick.creward.dependencies.HDBAPI;
 import cz.waterchick.creward.managers.PlayerManager;
 import cz.waterchick.creward.managers.reward.Reward;
@@ -39,6 +40,7 @@ public class GUI {
     private int fillerItemData;
     private List<Integer> fillerSlots;
     private boolean fillerEnabled;
+    private boolean fillerDisplayName;
 
     private Sound openSound;
     private int openPitch;
@@ -83,6 +85,11 @@ public class GUI {
                 }
                 if(isFillerEnabled()){
                     ItemStack fillerItemStack = new ItemStack(getFillerMaterial(), 1, (short) getFillerItemData());
+                    ItemMeta fillerMeta = fillerItemStack.getItemMeta();
+                    if(!fillerDisplayName) {
+                        fillerMeta.setDisplayName(Utilities.Color("&7"));
+                    }
+                    fillerItemStack.setItemMeta(fillerMeta);
                     for(Integer slot : getFillerSlots()){
                         inventory.setItem(slot,fillerItemStack);
                     }
@@ -196,5 +203,6 @@ public class GUI {
         this.openSound = pluginConfig.getOpenSound();
         this.openPitch = pluginConfig.getOpenPitch();
         this.openVolume = pluginConfig.getOpenVolume();
+        this.fillerDisplayName = pluginConfig.isFillerDisplayName();
     }
 }

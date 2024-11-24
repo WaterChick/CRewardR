@@ -37,6 +37,8 @@ GUI:
       - 4
     Item:
       Material: GRAY_STAINED_GLASS_PANE
+      # Should the display name be visible?
+      DisplayName: false
   Rewards:
     # Cant be just a number! (ex. '5')
     # Will cause problems when using MySQL

@@ -53,6 +53,7 @@ public class PluginConfig {
     private List<Integer> guiFillerSlots;
     private Material guiFillerItem;
     private int guiFillerItemData;
+    private boolean fillerDisplayName;
 
     private Boolean enable;
     private String username;
@@ -121,6 +122,7 @@ public class PluginConfig {
             guiFillerItem = Material.getMaterial(config.getString("GUI.Filler.Item.Material"));
             guiFillerItemData = config.getInt("GUI.Filler.Item.Data");
             guiFillerSlots = config.getIntegerList("GUI.Filler.Slots");
+            fillerDisplayName = config.getBoolean("GUI.Filler.Item.DisplayName");
 
             if(CReward.getPlugin().getSound(config.getString("Sounds.OPEN_MENU.Sound")) == null || CReward.getPlugin().getSound(config.getString("Sounds.REWARD_PICKUP.Sound")) == null){
                 CReward.getPlugin().getLogger().severe("Error while parsing sounds");
@@ -296,6 +298,9 @@ public class PluginConfig {
         if(!config.contains("aliases")){
             config.set("aliases", new ArrayList<>(Arrays.asList("rewards", "daily")));
         }
+        if(!config.contains("GUI.Filler.Item.DisplayName")){
+            config.set("GUI.Filler.Item.DisplayName", false);
+        }
         save();
     }
 
@@ -305,6 +310,10 @@ public class PluginConfig {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean isFillerDisplayName() {
+        return fillerDisplayName;
     }
 }
 
