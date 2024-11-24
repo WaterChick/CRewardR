@@ -5,6 +5,10 @@ import cz.waterchick.creward.managers.reward.Reward;
 import cz.waterchick.creward.managers.PlayerManager;
 import cz.waterchick.creward.managers.reward.RewardManager;
 import cz.waterchick.creward.managers.configurations.PluginConfig;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -71,14 +75,17 @@ public class Events implements Listener {
                     if(pluginConfig.getNotify().equalsIgnoreCase("false") || pluginConfig.getNotify() == null){
                         return;
                     }
-                    String msg = pluginConfig.getNotify();
-                    if(msg.equalsIgnoreCase("")){
-                        return;
-                    }
+                    TextComponent msg = new TextComponent(pluginConfig.getNotify());
+
                     if(CReward.getPlugin().isPapiEnabled()){
-                        msg = PlaceholderAPI.setPlaceholders(msg,null,p);
+                        msg.setText(PlaceholderAPI.setPlaceholders(msg.getText(),null,p));
                     }
-                    p.sendMessage(pluginConfig.getPrefix() + msg);
+                    boolean hoverEnabled = pluginConfig.isHoverEnabled();
+                    if(hoverEnabled){
+                        msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new ComponentBuilder(pluginConfig.getHoverMessage()).create()));
+                        msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, pluginConfig.getHoverCommand()));
+                    }
+                    p.spigot().sendMessage(new TextComponent(pluginConfig.getPrefix()), msg);
                 }
             }
         }, 20L * 3);

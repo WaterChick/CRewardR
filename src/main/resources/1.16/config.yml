@@ -113,3 +113,8 @@ MySQL:
   password: ''
   adress: localhost:3306
   db: creward
+
+hover:
+  enable: true
+  message: '&eClick to open Rewards menu'
+  command: '/cr'

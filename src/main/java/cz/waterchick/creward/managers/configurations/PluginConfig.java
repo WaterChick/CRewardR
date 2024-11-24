@@ -61,6 +61,10 @@ public class PluginConfig {
     private String adress;
     private String db;
 
+    private boolean hoverEnabled;
+    private String hoverMessage;
+    private String hoverCommand;
+
     private HashMap<CItem, Integer> otherItems = new HashMap<>();
 
 
@@ -143,6 +147,10 @@ public class PluginConfig {
             password = config.getString("MySQL.password");
             db = config.getString("MySQL.db");
             adress = config.getString("MySQL.adress");
+
+            hoverEnabled = config.getBoolean("hover.enable");
+            hoverMessage = Utilities.Color(config.getString("hover.message"));
+            hoverCommand = config.getString("hover.command");
 
             otherItems.clear();
             ConfigurationSection section = config.getConfigurationSection("GUI.otherItems");
@@ -301,6 +309,11 @@ public class PluginConfig {
         if(!config.contains("GUI.Filler.Item.DisplayName")){
             config.set("GUI.Filler.Item.DisplayName", false);
         }
+        if(!config.contains("hover")){
+            config.set("hover.enable", true);
+            config.set("hover.message", "&eClick to open Rewards menu");
+            config.set("hover.command", "/cr");
+        }
         save();
     }
 
@@ -314,6 +327,18 @@ public class PluginConfig {
 
     public boolean isFillerDisplayName() {
         return fillerDisplayName;
+    }
+
+    public boolean isHoverEnabled() {
+        return hoverEnabled;
+    }
+
+    public String getHoverMessage() {
+        return hoverMessage;
+    }
+
+    public String getHoverCommand() {
+        return hoverCommand;
     }
 }
 
